@@ -13,3 +13,7 @@ npm-debug.log
 yarn-error.log
 /.idea
 /.vscode
+/devops/db/
+/nginx-php8-fpm-mototaxi/
+/docker-compose.yml.back
+/devops/redis/
