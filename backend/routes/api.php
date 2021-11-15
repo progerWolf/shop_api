@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CountryCodeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -25,3 +26,5 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
     Route::post('/change-password', [AuthController::class, 'changePassword']);
     Route::post('/update', [AuthController::class, 'update']);
 });
+
+Route::get('countrycode', [CountryCodeController::class, 'index']);
