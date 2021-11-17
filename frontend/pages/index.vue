@@ -2,7 +2,7 @@
   <div class="container mx-auto">
     <div class="w-full flex items-start my-12">
       <div class="w-1/2">
-        <h1 class="mb-8 text-z-orange font-bold text-[64px] leading-[100%]">Учи таджикский познай культуру  таджикского народа </h1>
+        <h1 class="mb-8 text-z-orange font-bold text-[64px] leading-[100%]">Учи таджикский ультуру  таджикского народа </h1>
         <p class="mb-8 text-gray-500 text-lg">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy</p>
         <div>
          <nuxt-link class="border-2 rounded-md px-12 py-4 bg-z-orange border-transparent focus:outline-none text-white text-lg focus:border-red-300" to="">Стать студентом</nuxt-link>
