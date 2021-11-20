@@ -1,4 +1,4 @@
 [
-    {"name": "RUSSIAN", "iso": "RU", "phone_code": 7, "mask": "+7(___)-___-__-__", "flag": "🇷🇺", "is_active": true},
-    {"name": "TAJIKISTAN", "iso": "TJ", "phone_code": 992, "mask": "+992(___)-__-__-__", "flag": "\uD83C\uDDF9\uD83C\uDDEF", "is_active": true}
+    {"name": "Россия", "iso": "RU", "phone_code": 7, "mask": "+7(___)-___-__-__", "flag": "🇷🇺", "is_active": true},
+    {"name": "Таджикистан", "iso": "TJ", "phone_code": 992, "mask": "+992(___)-__-__-__", "flag": "\uD83C\uDDF9\uD83C\uDDEF", "is_active": true}
 ]
