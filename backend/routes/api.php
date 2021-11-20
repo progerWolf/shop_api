@@ -28,3 +28,7 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
 });
 
 Route::get('countrycode', [CountryCodeController::class, 'index']);
+Route::post('countrycode', [CountryCodeController::class, 'store']);
+Route::get('countrycode/{countryCode}', [CountryCodeController::class, 'show']);
+Route::put('countrycode/{countryCode}', [CountryCodeController::class, 'update']);
+Route::delete('countrycode/{countryCode}', [CountryCodeController::class, 'destroy']);
