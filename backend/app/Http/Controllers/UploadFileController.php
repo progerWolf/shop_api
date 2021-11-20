@@ -6,7 +6,7 @@ use App\Http\Requests\UploadImageRequest;
 use App\Interfaces\UploadFileServiceInterface;
 use Illuminate\Http\JsonResponse;
 
-class FileUploadController extends Controller
+class UploadFileController extends Controller
 {
     public function __construct(
         private UploadFileServiceInterface $uploadFileService

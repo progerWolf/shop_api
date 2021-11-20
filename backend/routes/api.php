@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\CountryCodeController;
-use App\Http\Controllers\FileUploadController;
+use App\Http\Controllers\UploadFileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -35,4 +35,4 @@ Route::put('countrycode/{countryCode}', [CountryCodeController::class, 'update']
 Route::delete('countrycode/{countryCode}', [CountryCodeController::class, 'destroy']);
 
 
-Route::post('image', [FileUploadController::class, 'uploadImageFile']);
+Route::post('image', [UploadFileController::class, 'uploadImageFile']);
