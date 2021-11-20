@@ -20,8 +20,12 @@ module.exports = {
       red: colors.red,
       yellow: colors.amber,
       blue: colors.blue,
-      'z-orange': '#F53F02',
-      'z-black': '#1E1718',
+      indigo: colors.indigo,
+      brand: '#ff002a',
+      'brand-1': '#ff002a',
+      'brand-2': '#ff002a',
+      'brand-3': '#ff002a',
+      'brand-4': '#ff002a7d',
     },
     extend: {
       container: {

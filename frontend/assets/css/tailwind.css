@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.form-control {
+    @apply mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-md sm:text-sm border-gray-300 rounded-md;
+}
+
+.tab {
+    @apply hover:bg-gray-200 text-gray-500 hover:text-gray-700 px-3 py-2 font-medium text-sm rounded-md;
+}
+
+.tab.active {
+    @apply bg-brand-4 text-white;
+}
