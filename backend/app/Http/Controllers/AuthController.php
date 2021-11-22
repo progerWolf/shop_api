@@ -2,19 +2,28 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\BidStoreRequest;
-use App\Http\Requests\NumberCheckRequest;
+//use App\Http\Requests\BidStoreRequest;
+use App\Http\Requests\ChangePasswordRequest;
+use App\Http\Requests\CheckNumberRequest;
+use App\Http\Requests\ConfirmNumberRequest;
+use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
-use App\Http\Requests\UserUpdateInfoRequest;
-use App\Http\Resources\UserResource;
-use App\Models\Bid;
 use App\Models\ConfirmPassword;
-use App\Models\Permission;
+use App\Models\CountryCode;
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+use Propaganistas\LaravelPhone\PhoneNumber;
+
+//use App\Http\Requests\UserUpdateInfoRequest;
+//use App\Http\Resources\UserResource;
+//use App\Models\Bid;
+
+//use App\Models\Permission;
+
 // use OsonSMS\SMSGateway\SMSGateway;
 
 class AuthController extends Controller
@@ -24,23 +33,22 @@ class AuthController extends Controller
      *
      * @return void
      */
-    public function __construct() {
-        $this->middleware('auth:api', ['except' => ['login', 'register', 'numberCheck', 'createNewToken', 'changePassword']]);
+    public function __construct()
+    {
+        $this->middleware('auth:api', ['except' => ['login', 'register', 'checkNumber', 'confirmNumber', 'createNewToken', 'changePassword']]);
     }
 
     /**
      * Get a JWT via given credentials.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @param LoginRequest $request
+     * @return JsonResponse
      */
-    public function login(Request $request){
-    	$validator = Validator::make($request->all(), [
-            'phone' => 'required',
-            'password' => 'required|string|min:6',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+    public function login(LoginRequest $request): JsonResponse
+    {
+        $checkCountry = $this->checkAndFormatNumberCountry($request);
+        if ($checkCountry !== true) {
+            return $checkCountry;
         }
 
         // if ($request->dashboard && !User::where('phone', $request->phone)->first()->hasPermission('dashboard')) {
@@ -50,8 +58,8 @@ class AuthController extends Controller
         // }
 
         if (!$token = auth()->setTTL(45000)->attempt([
-            'phone'=> $request->phone,
-            'password'=> $request->password,
+            'phone' => $request->phone,
+            'password' => $request->password,
             'is_active' => 1
         ])) {
             return response()->json(['error' => 'Unauthorized'], 401);
@@ -63,9 +71,14 @@ class AuthController extends Controller
     /**
      * Register a User.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function register(RegisterRequest $request) {
+    public function register(RegisterRequest $request): JsonResponse
+    {
+        $checkCountry = $this->checkAndFormatNumberCountry($request);
+        if ($checkCountry !== true) {
+            return $checkCountry;
+        }
 
         $confirm = ConfirmPassword::where('phone', $request->phone)->where('confirmed', 1)->first();
 
@@ -75,16 +88,17 @@ class AuthController extends Controller
             ], 403);
         }
 
-        $user = User::create(array_merge(
-            $request->validated(),
-            [
-                'password' => $request->password,
-                'is_active' => 1,
-            ]
-        ));
+        User::create([
+            'name' => $request->name,
+            'phone' => $request->phone,
+            'password' => $request->password,
+            'is_active' => true,
+            'country_code_id' => $request->country_code
+        ]);
+
         $confirm->delete();
 
-        if (! $token = auth()->setTTL(45000)->attempt([
+        if (!$token = auth()->setTTL(45000)->attempt([
             'phone' => $request->phone,
             'password' => $request->password,
             'is_active' => 1
@@ -95,13 +109,13 @@ class AuthController extends Controller
         return $this->createNewToken($token);
     }
 
-
     /**
      * Log the user out (Invalidate the token).
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function logout() {
+    public function logout(): JsonResponse
+    {
         auth()->logout();
 
         return response()->json(['message' => 'User successfully signed out']);
@@ -110,38 +124,22 @@ class AuthController extends Controller
     /**
      * Refresh a token.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function refresh() {
+    public function refresh(): JsonResponse
+    {
         return $this->createNewToken(auth()->refresh());
-    }
-
-    /**
-     * Get the authenticated User.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function userProfile() {
-        $user = User::find(auth()->user()->id);
-
-        // if ($user->hasPermission('dashboard-read')) {
-        // if (1) {
-        //     $user->load('allPermissions');
-        // }
-
-        return response()->json(
-            $user
-        );
     }
 
     /**
      * Get the token array structure.
      *
-     * @param  string $token
+     * @param string $token
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    protected function createNewToken($token){
+    protected function createNewToken(string $token): JsonResponse
+    {
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
@@ -150,37 +148,63 @@ class AuthController extends Controller
         ]);
     }
 
-    public function numberCheck(NumberCheckRequest $request) {
-        if ($request->reset) {
-            if (!User::where('phone', $request->phone)->count() > 0) {
-                return response()->json([
-                    'message' => 'Пользователь с таким телефоном не зарегистрирован.',
-                ], 403);
-            }
-        } else {
-            if (User::where('phone', $request->phone)->count() > 0) {
-                return response()->json([
-                    'message' => 'Пользователь с таким телефоном уже зарегистрирован.',
-                ], 403);
-            }
+    public function confirmNumber(ConfirmNumberRequest $request): JsonResponse
+    {
+        $checkCountry = $this->checkAndFormatNumberCountry($request);
+        if ($checkCountry !== true) {
+            return $checkCountry;
         }
 
-        if ($request->confirm_code) {
-            $confirm = ConfirmPassword::where('confirm_code', $request->confirm_code)->where('phone', $request->phone)->first();
-            if (!$confirm) {
-                return response()->json([
-                    'message' => 'Введен неправильный код.',
-                ], 403);
-            }
-            $confirm->update([
-                'confirmed' => 1,
-            ]);
+        $confirm = ConfirmPassword::where('confirm_code', $request->confirm_code)
+            ->where('phone', $request->phone)
+            ->latest();
+
+        if (!$confirm) {
             return response()->json([
-                'confirmed' => true,
-            ]);
+                'message' => 'Введен неправильный код.',
+            ], 403);
         }
 
-        if (ConfirmPassword::where('phone',$request->phone)->where('qty', '>=', 5)->where('updated_at', '>', Carbon::parse()->now()->subMinutes(60)->format('Y-m-d H:i:s'))->count() > 0) {
+        $confirm->update([
+            'confirmed' => 1,
+        ]);
+
+        return response()->json([
+            'confirmed' => true,
+        ]);
+    }
+
+    public function checkNumber(CheckNumberRequest $request): JsonResponse
+    {
+        $checkCountry = $this->checkAndFormatNumberCountry($request);
+
+         if ($checkCountry !== true) {
+             return $checkCountry;
+         }
+
+        $userCount = User::where('phone', $request->phone)->count();
+
+        if (isset($request->reset) && !($userCount > 0)) {
+            return response()->json([
+                'message' => 'Пользователь с таким телефоном не зарегистрирован.',
+            ], 403);
+        }
+
+        if ((!isset($request->confirm_code) || !isset($request->reset)) && $userCount > 0) {
+            return response()->json([
+                'message' => 'Пользователь с таким телефоном уже зарегистрирован.',
+            ], 403);
+
+        }
+
+        $sixteenMinutesBefore = Carbon::parse()->now()->subMinutes(60)->format('Y-m-d H:i:s');
+
+        $confirmPasswordCount = ConfirmPassword::where('phone', $request->phone)
+            ->where('qty', '>=', 5)
+            ->where('updated_at', '>', $sixteenMinutesBefore)
+            ->count();
+
+        if ($confirmPasswordCount > 0) {
             return response()->json([
                 'message' => 'Слишком много попыток, повторите позже!',
             ], 402);
@@ -188,13 +212,17 @@ class AuthController extends Controller
 
         $confirm_code = random_int(1000, 9999);
 
-        $confirm = ConfirmPassword::updateOrCreate([
-            'phone'=> $request->phone,
-        ],[
-            'phone'=> $request->phone,
-            'confirm_code'=> $confirm_code,
-            'qty'=> DB::raw('qty + 1'),
-        ]);
+        ConfirmPassword::updateOrCreate(
+            [
+                'phone' => $request->phone,
+            ],
+            [
+                'phone' => $request->phone,
+                'confirm_code' => $confirm_code,
+                'qty' => DB::raw('qty + 1'),
+                'country_code_id' => $request->country_code
+            ]
+        );
 
         // $txn_id = uniqid();
         // $result = SMSGateway::Send($request->phone, 'Ваш код: ' . $confirm_code, $txn_id);
@@ -208,29 +236,17 @@ class AuthController extends Controller
         // }
 
         return response()->json([
-            'confirm_code'=> $confirm_code
+            'confirm_code' => $confirm_code
             // 'status'=> false
         ]);
     }
 
-    public function changePassword(Request $request) {
-        $validator = Validator::make($request->all(), [
-            'phone' => 'required',
-            'password' => 'required|string|confirmed|min:6',
-        ]);
+    public function changePassword(ChangePasswordRequest $request)
+    {
+        $checkCountry = $this->checkAndFormatNumberCountry($request);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'message' => 'Пароль должен содержать не менее 6 символов.',
-            ], 422);
-        }
-
-        $confirm = ConfirmPassword::where('phone', $request->phone)->where('confirmed', 1)->first();
-
-        if (!$confirm) {
-            return response()->json([
-                'message' => 'Введены некорректные данные.',
-            ], 403);
+        if ($checkCountry !== true) {
+            return $checkCountry;
         }
 
         $user = User::where('phone', $request->phone)->first();
@@ -245,10 +261,39 @@ class AuthController extends Controller
             'password' => $request->password
         ]);
 
-        $confirm->delete();
-
         return response()->json([
-            'message'=> 'Ваш пароль успешно обновлен'
+            'message' => 'Ваш пароль успешно обновлен'
         ]);
+    }
+
+    private function checkAndFormatNumberCountry(&$request)
+    {
+        $object = new PhoneNumber($request->phone);
+        $iso = CountryCode::select('iso')
+            ->where('is_active', '=', true)
+            ->where('id', '=', $request->country_code)
+            ->get()
+            ->toArray();
+
+        try {
+            $object = $object->ofCountry($iso[0]['iso']);
+            $check = $object->isOfCountry($iso[0]['iso']);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Введённый номер не совпадает с выбранной страной'
+            ], 400);
+        }
+
+        if (!$check) {
+            return response()->json([
+                'phone' => [
+                    'Введённый номер  не валиден'
+                ]
+            ], 422);
+        }
+
+        $request->phone = PhoneNumber::make($request->phone, $iso[0]['iso'])->formatE164();
+
+        return $check;
     }
 }

@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -13,7 +13,7 @@ class User extends Authenticatable implements JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-     /**
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -24,6 +24,7 @@ class User extends Authenticatable implements JWTSubject
         'password',
         'avatar',
         'is_active',
+        'country_code_id'
     ];
 
     /**
@@ -45,7 +46,6 @@ class User extends Authenticatable implements JWTSubject
         'email_verified_at' => 'datetime',
     ];
 
-    
 
     // Rest omitted for brevity
 
@@ -69,8 +69,13 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
-    public function setPasswordAttribute($value){
-
+    public function setPasswordAttribute($value)
+    {
         $this->attributes['password'] = bcrypt($value);
+    }
+
+    public function countryCode(): BelongsTo
+    {
+        return $this->belongsTo(CountryCode::class);
     }
 }

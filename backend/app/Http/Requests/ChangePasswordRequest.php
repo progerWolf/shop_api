@@ -3,12 +3,12 @@
 namespace App\Http\Requests;
 
 use App\Models\CountryCode;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Validation\Rule;
 
-class RegisterRequest extends FormRequest
+class ChangePasswordRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -17,7 +17,7 @@ class RegisterRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return false;
     }
 
     /**
@@ -28,13 +28,10 @@ class RegisterRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
-            'direction_id' => 'sometimes',
-            'password' => 'required|string|confirmed|min:6',
             'country_code' => 'required|numeric',
+            'password' => 'required|string|confirmed|min:6',
             'phone' => [
                 'required',
-                'unique:users',
                 Rule::phone()->country(CountryCode::getCountriesIso()),
             ],
         ];
@@ -48,10 +45,8 @@ class RegisterRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.required'           => 'Название компании является обязательным',
-            'phone.required'          => 'Номер телефона является обязательным',
-            'phone.phone'             => 'Номер телефона не валиден',
-            'phone.unique'            => 'Пользователь с таким телефоном уже зарегистрирован',
+            'phone.required'            => 'Номер телефона является обязательным',
+            'phone.phone'               => 'Номер телефона не валиден',
             'password.required'       => 'Пароль является обязательным',
             'password.min'            => 'Пароль должен содержать минимум 8 символов',
             'password.confirmed'      => 'Пароли не совпадают',
@@ -61,12 +56,13 @@ class RegisterRequest extends FormRequest
     }
 
     /**
-    * [failedValidation [Overriding the event validator for custom error response]]
-    * @param  Validator $validator [description]
-    *
-    * @return [object][object of various validation errors]
-    */
-    public function failedValidation(Validator $validator) {
-       throw new HttpResponseException(response()->json($validator->errors(), 422));
+     * [failedValidation [Overriding the event validator for custom error response]]
+     * @param Validator $validator [description]
+     *
+     * @return void [object][object of various validation errors]
+     */
+    public function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response()->json($validator->errors(), 422));
     }
 }
