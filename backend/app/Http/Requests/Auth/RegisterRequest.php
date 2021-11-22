@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Auth;
 
+use App\Models\CountryCode;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Validation\Rule;
 
 class RegisterRequest extends FormRequest
 {
@@ -28,8 +30,13 @@ class RegisterRequest extends FormRequest
         return [
             'name' => 'required',
             'direction_id' => 'sometimes',
-            'phone' => 'required|unique:users',
             'password' => 'required|string|confirmed|min:6',
+            'country_code' => 'required|numeric',
+            'phone' => [
+                'required',
+                'unique:users',
+                Rule::phone()->country(CountryCode::getCountriesIso()),
+            ],
         ];
     }
 
@@ -43,20 +50,23 @@ class RegisterRequest extends FormRequest
         return [
             'name.required'           => 'Название компании является обязательным',
             'phone.required'          => 'Номер телефона является обязательным',
+            'phone.phone'             => 'Номер телефона не валиден',
             'phone.unique'            => 'Пользователь с таким телефоном уже зарегистрирован',
             'password.required'       => 'Пароль является обязательным',
             'password.min'            => 'Пароль должен содержать минимум 8 символов',
             'password.confirmed'      => 'Пароли не совпадают',
+            'country_code.required'     => 'Код страны яквляется обязательным',
+            'country_code.numeric'      => 'Код страны должен быт числом'
         ];
     }
-    
+
     /**
     * [failedValidation [Overriding the event validator for custom error response]]
     * @param  Validator $validator [description]
     *
     * @return [object][object of various validation errors]
     */
-    public function failedValidation(Validator $validator) { 
-       throw new HttpResponseException(response()->json($validator->errors(), 422)); 
+    public function failedValidation(Validator $validator) {
+       throw new HttpResponseException(response()->json($validator->errors(), 422));
     }
 }
