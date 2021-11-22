@@ -29,7 +29,6 @@ class RegisterRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'direction_id' => 'sometimes',
             'password' => 'required|string|confirmed|min:6',
             'country_code' => 'required|numeric',
             'phone' => [
