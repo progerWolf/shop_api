@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Auth;
 
 use App\Models\CountryCode;
 use Illuminate\Contracts\Validation\Validator;
@@ -8,7 +8,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
 
-class ChangePasswordRequest extends FormRequest
+class CheckNumberRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -17,7 +17,7 @@ class ChangePasswordRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -28,12 +28,12 @@ class ChangePasswordRequest extends FormRequest
     public function rules()
     {
         return [
-            'country_code' => 'required|numeric',
-            'password' => 'required|string|confirmed|min:6',
             'phone' => [
                 'required',
                 Rule::phone()->country(CountryCode::getCountriesIso()),
             ],
+            'reset' => 'boolean',
+            'country_code' => 'required|numeric'
         ];
     }
 
@@ -45,11 +45,8 @@ class ChangePasswordRequest extends FormRequest
     public function messages()
     {
         return [
-            'phone.required'            => 'Номер телефона является обязательным',
-            'phone.phone'               => 'Номер телефона не валиден',
-            'password.required'       => 'Пароль является обязательным',
-            'password.min'            => 'Пароль должен содержать минимум 8 символов',
-            'password.confirmed'      => 'Пароли не совпадают',
+            'phone.required' => 'Номер телефона является обязательным',
+            'phone.phone' => 'Номер телефона не валиден',
             'country_code.required'     => 'Код страны яквляется обязательным',
             'country_code.numeric'      => 'Код страны должен быт числом'
         ];
@@ -59,7 +56,7 @@ class ChangePasswordRequest extends FormRequest
      * [failedValidation [Overriding the event validator for custom error response]]
      * @param Validator $validator [description]
      *
-     * @return void [object][object of various validation errors]
+     * @return [object][object of various validation errors]
      */
     public function failedValidation(Validator $validator)
     {

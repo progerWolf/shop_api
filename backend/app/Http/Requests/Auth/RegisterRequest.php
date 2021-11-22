@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Auth;
 
 use App\Models\CountryCode;
 use Illuminate\Foundation\Http\FormRequest;
