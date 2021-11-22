@@ -157,7 +157,7 @@ class AuthController extends Controller
             ->where('phone', $request->phone)
             ->latest();
 
-        if (!$confirm) {
+        if ($confirm->count() < 1) {
             return response()->json([
                 'message' => 'Введен неправильный код.',
             ], 403);
