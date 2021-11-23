@@ -24,7 +24,8 @@ class CountryCodeSeeder extends Seeder
                 'name' => $obj->name,
                 'iso' => $obj->iso,
                 'phone_code' => $obj->phone_code,
-                'mask' => $obj->mask,
+                'maxlength' => $obj->maxlength,
+                'minlength' => $obj->minlength,
                 'flag' => $obj->flag,
                 'is_active' => $obj->is_active
             ]);

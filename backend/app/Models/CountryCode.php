@@ -13,7 +13,8 @@ class CountryCode extends Model
         'name',
         'iso',
         'phone_code',
-        'mask',
+        'maxlength',
+        'minlength',
         'flag',
         'is_active'
     ];
