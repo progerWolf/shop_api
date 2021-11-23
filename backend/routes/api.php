@@ -5,6 +5,7 @@ use App\Http\Controllers\UploadFileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,7 +30,7 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
     Route::post('/update', [AuthController::class, 'update']);
 });
 
-Route::get('countrycode', [CountryCodeController::class, 'index']);
+Route::get('countrycode', [HomeController::class, 'getCountryCodes']);
 Route::post('image', [UploadFileController::class, 'uploadImageFile']);
 
 Route::group(['middleware' => ['api', 'auth'], 'prefix' => 'dashboard'], function ($router) {

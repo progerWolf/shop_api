@@ -60,7 +60,7 @@ class AuthController extends Controller
             'password' => $request->password,
             'is_active' => 1
         ])) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return response()->json(['error' => 'Введён неверный номер телефона или пароль'], 401);
         }
 
         return $this->createNewToken($token);
@@ -101,7 +101,7 @@ class AuthController extends Controller
             'password' => $request->password,
             'is_active' => 1
         ])) {
-            return response()->json(['error' => 'Unauthorized.'], 401);
+            return response()->json(['error' => 'Введён неверный номер телефона или пароль'], 401);
         }
 
         return $this->createNewToken($token);
