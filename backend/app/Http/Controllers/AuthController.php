@@ -294,4 +294,14 @@ class AuthController extends Controller
 
         return $check;
     }
+
+    /**
+     * Get the authenticated User.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function me()
+    {
+        return response()->json(auth()->user());
+    }
 }
