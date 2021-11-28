@@ -21,7 +21,7 @@ class CountryCode extends Model
 
     public function scopeGetCountriesIso($query): array
     {
-        $countryCodes = $query->select('iso')->where('is_active', true)->first();
+        $countryCodes = $query->select('iso')->where('is_active', true)->get()->toArray();
 
         $codes = [];
         foreach ($countryCodes as $countryCode)
