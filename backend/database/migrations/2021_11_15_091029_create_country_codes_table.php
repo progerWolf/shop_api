@@ -18,8 +18,6 @@ class CreateCountryCodesTable extends Migration
             $table->string('name')->unique();
             $table->string('iso')->unique();
             $table->integer('phone_code')->unique();
-            $table->integer('maxlength');
-            $table->integer('minlength');
             $table->string('flag');
             $table->boolean('is_active')->default(true);
             $table->timestamps();

@@ -18,7 +18,7 @@ class CountryCodeController extends Controller
      */
     public function index(): AnonymousResourceCollection
     {
-        $countriesCode = CountryCode::all();
+        $countriesCode = CountryCode::where('is_active', true)->get();
         return CountryCodeResource::collection($countriesCode);
     }
 
