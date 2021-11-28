@@ -188,7 +188,7 @@ class AuthController extends Controller
             ], 403);
         }
 
-        if ((!isset($request->confirm_code) || !isset($request->reset)) && $userCount > 0) {
+        if (!isset($request->reset) && $userCount > 0) {
             return response()->json([
                 'message' => 'Пользователь с таким телефоном уже зарегистрирован.',
             ], 403);
