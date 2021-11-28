@@ -30,7 +30,7 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
     Route::post('/update', [AuthController::class, 'update']);
 });
 
-Route::get('countrycode', [HomeController::class, 'getCountryCodes']);
+Route::get('countrycode', [CountryCodeController::class, 'index']);
 Route::post('image', [UploadFileController::class, 'uploadImageFile']);
 
 Route::group(['middleware' => ['api', 'auth'], 'prefix' => 'dashboard'], function ($router) {
