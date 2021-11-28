@@ -23,8 +23,11 @@ class CountryCode extends Model
     {
         $countryCodes = $query->select('iso')->where('is_active', true)->first();
 
-        dump($countryCodes->iso);
-        $codes[] = $countryCodes->iso;
+        $codes = [];
+        foreach ($countryCodes as $countryCode)
+        {
+            $codes[] = $countryCode['iso'];
+        }
 
         return $codes;
     }
