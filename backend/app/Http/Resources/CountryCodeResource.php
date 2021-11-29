@@ -19,7 +19,8 @@ class CountryCodeResource extends JsonResource
             'name' => $this->name,
             'iso' => $this->iso,
             'phone_code' => $this->phone_code,
-            'mask' => $this->mask,
+            'maxlength' => $this->maxlength,
+            'minlength' => $this->minlength,
             'flag' => $this->flag,
             'is_active' => $this->is_active
         ];

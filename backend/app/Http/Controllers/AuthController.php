@@ -188,7 +188,7 @@ class AuthController extends Controller
             ], 403);
         }
 
-        if ((!isset($request->confirm_code) || !isset($request->reset)) && $userCount > 0) {
+        if (!isset($request->reset) && $userCount > 0) {
             return response()->json([
                 'message' => 'Пользователь с таким телефоном уже зарегистрирован.',
             ], 403);
@@ -268,14 +268,13 @@ class AuthController extends Controller
     {
         $object = new PhoneNumber($request->phone);
         $iso = CountryCode::select('iso')
-            ->where('is_active', '=', true)
-            ->where('id', '=', $request->country_code)
-            ->get()
-            ->toArray();
+            ->where('is_active', true)
+            ->where('id', $request->country_code)
+            ->first();
 
         try {
-            $object = $object->ofCountry($iso[0]['iso']);
-            $check = $object->isOfCountry($iso[0]['iso']);
+            $object = $object->ofCountry($iso->iso);
+            $check = $object->isOfCountry($iso->iso);
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Введённый номер не совпадает с выбранной страной'
@@ -290,7 +289,7 @@ class AuthController extends Controller
             ], 422);
         }
 
-        $request->phone = PhoneNumber::make($request->phone, $iso[0]['iso'])->formatE164();
+        $request->phone = PhoneNumber::make($request->phone, $iso->iso)->formatE164();
 
         return $check;
     }
