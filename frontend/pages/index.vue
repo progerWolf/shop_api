@@ -39,23 +39,6 @@
       </div>
     </div>
 
-    <div>
-      <h1 class="text-[36px] leading-[25px] text-gray-800 font-medium">Все курсы</h1>
-      <div class="w-full flex flex-wrap0">
-        <div class="lg:w-1/4 my-8 mr-6">
-          <CardVideo />
-        </div>
-        <div class="lg:w-1/4 my-8 mr-6">
-          <CardVideo />
-        </div>
-        <div class="lg:w-1/4 my-8 mr-6">
-          <CardVideo />
-        </div>
-        <div class="lg:w-1/4 my-8">
-          <CardVideo />
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 

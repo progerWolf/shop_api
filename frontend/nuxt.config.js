@@ -1,3 +1,7 @@
+
+let development = process.env.NODE_ENV !== 'production'
+let baseUrl = development ? 'http://127.0.0.1:8000' : 'http://app.mototaxi.tj'
+
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
@@ -40,10 +44,39 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    '@nuxtjs/auth-next',
+    'nuxt-sweetalert2'
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {},
+  axios: {
+    baseURL: `${baseUrl}/api`
+
+    // credentials: true
+  },
+
+  auth: {
+    strategies: {
+      'laravelJWT': {
+        provider: 'laravel/jwt',
+        url: baseUrl,
+        endpoints: {},
+        token: {
+          property: 'access_token',
+          maxAge: 60 * 60
+        },
+        refreshToken: {
+          maxAge: 20160 * 60
+        },
+      },
+    },
+    redirect: {
+      login: '/login',
+      logout: '/login',
+      callback: '/login',
+      home: '/'
+    }
+  },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
