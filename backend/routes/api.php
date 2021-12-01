@@ -23,7 +23,7 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/refresh', [AuthController::class, 'refresh']);
-    Route::get('/user', [AuthController::class, 'userProfile']);
+    Route::get('/user', [AuthController::class, 'me']);
     Route::post('/check-number', [AuthController::class, 'checkNumber']);
     Route::post('/confirm-number', [AuthController::class, 'confirmNumber']);
     Route::post('/change-password', [AuthController::class, 'changePassword']);
