@@ -47,7 +47,7 @@ class RegisterRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.required'           => 'Название компании является обязательным',
+            'name.required'           => 'Имя является обязательным',
             'phone.required'          => 'Номер телефона является обязательным',
             'phone.phone'             => 'Номер телефона не валиден',
             'phone.unique'            => 'Пользователь с таким телефоном уже зарегистрирован',
@@ -60,11 +60,11 @@ class RegisterRequest extends FormRequest
     }
 
     /**
-    * [failedValidation [Overriding the event validator for custom error response]]
-    * @param  Validator $validator [description]
-    *
-    * @return [object][object of various validation errors]
-    */
+     * [failedValidation [Overriding the event validator for custom error response]]
+     * @param Validator $validator [description]
+     *
+     * @return void [object][object of various validation errors]
+     */
     public function failedValidation(Validator $validator) {
        throw new HttpResponseException(response()->json($validator->errors(), 422));
     }
