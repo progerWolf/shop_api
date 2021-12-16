@@ -43,10 +43,6 @@ class StoreCountryCodeRequest extends FormRequest
                 'numeric',
                 Rule::unique('country_codes', 'phone_code')->ignore($this->countryCode)
             ],
-            'mask' => [
-                'required',
-                Rule::unique('country_codes', 'mask')->ignore($this->countryCode)
-            ],
             'flag' => 'required',
         ];
     }
@@ -69,8 +65,6 @@ class StoreCountryCodeRequest extends FormRequest
             'phone_code.numeric'           => 'Код телефона должен быть числом',
             'phone_code.required'          => 'Код телефона страны является обязательным',
             'phone_code.unique'            => 'Код телефона страны уже добавлен',
-            'mask.required'                => 'Маска телефона страны является обязательным',
-            'mask.unique'                  => 'Маска телефона страны уже добавлен',
             'flag.required'                => 'Флаг страны является обязательным'
         ];
     }

@@ -1,23 +1,24 @@
 <?php
 
-namespace App\Http\Requests\Auth;
+namespace App\Http\Requests;
 
 use App\Models\CountryCode;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Validation\Rule;
+use JetBrains\PhpStorm\ArrayShape;
 
-class RegisterRequest extends FormRequest
+class UpdateProfileRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
-        return true;
+        return false;
     }
 
     /**
@@ -25,11 +26,12 @@ class RegisterRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'name' => 'required',
-            'password' => 'required|string|confirmed|min:6',
+            'avatar' => 'optional',
+            'change_password' => 'bool',
             'country_code' => 'required|numeric',
             'phone' => [
                 'required',
@@ -51,9 +53,9 @@ class RegisterRequest extends FormRequest
             'phone.required'          => 'Номер телефона является обязательным',
             'phone.phone'             => 'Номер телефона не валиден',
             'phone.unique'            => 'Пользователь с таким телефоном уже зарегистрирован',
-            'password.required'       => 'Пароль является обязательным',
-            'password.min'            => 'Пароль должен содержать минимум 8 символов',
-            'password.confirmed'      => 'Пароли не совпадают',
+//            'password.required'       => 'Пароль является обязательным',
+//            'password.min'            => 'Пароль должен содержать минимум 8 символов',
+//            'password.confirmed'      => 'Пароли не совпадают',
             'country_code.required'     => 'Код страны яквляется обязательным',
             'country_code.numeric'      => 'Код страны должен быт числом'
         ];
@@ -66,6 +68,6 @@ class RegisterRequest extends FormRequest
      * @return void [object][object of various validation errors]
      */
     public function failedValidation(Validator $validator) {
-       throw new HttpResponseException(response()->json($validator->errors(), 422));
+        throw new HttpResponseException(response()->json($validator->errors(), 422));
     }
 }

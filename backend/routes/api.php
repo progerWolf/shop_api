@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\CountryCodeController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UploadFileController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -23,11 +25,9 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/refresh', [AuthController::class, 'refresh']);
-    Route::get('/user', [AuthController::class, 'me']);
     Route::post('/check-number', [AuthController::class, 'checkNumber']);
     Route::post('/confirm-number', [AuthController::class, 'confirmNumber']);
     Route::post('/change-password', [AuthController::class, 'changePassword']);
-    Route::post('/update', [AuthController::class, 'update']);
 });
 
 Route::get('countrycode', [CountryCodeController::class, 'index']);
@@ -37,5 +37,14 @@ Route::group(['middleware' => ['api', 'auth'], 'prefix' => 'dashboard'], functio
     Route::apiResources([
         'countrycode' => CountryCodeController::class,
     ]);
+    Route::apiResources([
+        'user' => UserController::class
+    ]);
+});
+
+Route::group(['middleware' => ['api', 'auth'], 'prefix' => 'profile'], function ($router) {
+    Route::get('/', [ProfileController::class, 'show']);
+    Route::post('/update', [ProfileController::class, 'update']);
+    Route::post('/delete', [ProfileController::class, 'delete']);
 });
 
