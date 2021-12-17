@@ -44,7 +44,7 @@ class AuthController extends Controller
      */
     public function login(LoginRequest $request): JsonResponse
     {
-        $checkCountry = $this->checkAndFormatNumberCountry($request);
+        $checkCountry = checkAndFormatNumberCountry($request);
         if ($checkCountry !== true) {
             return $checkCountry;
         }
@@ -73,7 +73,7 @@ class AuthController extends Controller
      */
     public function register(RegisterRequest $request): JsonResponse
     {
-        $checkCountry = $this->checkAndFormatNumberCountry($request);
+        $checkCountry = checkAndFormatNumberCountry($request);
         if ($checkCountry !== true) {
             return $checkCountry;
         }
@@ -148,7 +148,7 @@ class AuthController extends Controller
 
     public function confirmNumber(ConfirmNumberRequest $request): JsonResponse
     {
-        $checkCountry = $this->checkAndFormatNumberCountry($request);
+        $checkCountry = checkAndFormatNumberCountry($request);
         if ($checkCountry !== true) {
             return $checkCountry;
         }
@@ -174,7 +174,7 @@ class AuthController extends Controller
 
     public function checkNumber(CheckNumberRequest $request): JsonResponse
     {
-        $checkCountry = $this->checkAndFormatNumberCountry($request);
+        $checkCountry = checkAndFormatNumberCountry($request);
 
         if ($checkCountry !== true) {
             return $checkCountry;
@@ -241,7 +241,7 @@ class AuthController extends Controller
 
     public function changePassword(ChangePasswordRequest $request)
     {
-        $checkCountry = $this->checkAndFormatNumberCountry($request);
+        $checkCountry = checkAndFormatNumberCountry($request);
 
         if ($checkCountry !== true) {
             return $checkCountry;
@@ -263,7 +263,7 @@ class AuthController extends Controller
             'message' => 'Ваш пароль успешно обновлен'
         ]);
     }
-
+  
     private function checkAndFormatNumberCountry(&$request)
     {
         $object = new PhoneNumber($request->phone);

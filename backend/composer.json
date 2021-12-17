@@ -17,6 +17,7 @@
         "laravel/tinker": "^2.5",
         "propaganistas/laravel-phone": "^4.3",
         "spatie/laravel-sluggable": "^3.1",
+        "santigarcor/laratrust": "^6.3",
         "tymon/jwt-auth": "^1.0"
     },
     "require-dev": {
@@ -32,7 +33,10 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files": [
+            "app/helpers.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
