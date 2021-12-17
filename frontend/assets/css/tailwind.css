@@ -13,3 +13,15 @@
 .tab.active {
     @apply bg-brand-4 text-white;
 }
+
+.navbar-item {
+    @apply border-transparent text-gray-900 hover:bg-gray-50 hover:text-gray-900 border-l-4 px-3 py-2 flex items-center text-sm font-medium justify-between;
+}
+
+.navbar-item.active {
+    @apply bg-brand-3  border-brand-4 text-brand-4;
+}
+
+.navbar-item.active .svg-active {
+    @apply text-brand-4 group-hover:text-brand-4;
+}

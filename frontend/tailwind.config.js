@@ -24,8 +24,10 @@ module.exports = {
       brand: '#ff002a',
       'brand-1': '#ff002a',
       'brand-2': '#ff002a',
-      'brand-3': '#ff002a',
+      'brand-3': '#ff002a0f',
       'brand-4': '#ff002a7d',
+      sky: colors.sky,
+      teal: colors.teal,
     },
     extend: {
       container: {
@@ -40,9 +42,12 @@ module.exports = {
   }
   },
   variants: {
-    extend: {},
+    extend: {
+      divideColor: ['group-hover'],
+    }
   },
   plugins: [
     require('@tailwindcss/line-clamp'),
+    require('@tailwindcss/forms'),
   ],
 }
