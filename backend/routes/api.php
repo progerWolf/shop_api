@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProductCategoryController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ShopController;
+use App\Models\ProductCategory;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,6 +36,9 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
 
 Route::get('countrycode', [CountryCodeController::class, 'index']);
 Route::post('image', [UploadFileController::class, 'uploadImageFile']);
+Route::resource('categories', ProductCategoryController::class);
+Route::resource('shops', ShopController::class);
+Route::resource('products', ProductController::class);
 
 Route::group(['middleware' => ['api', 'auth'], 'prefix' => 'dashboard'], function ($router) {
     Route::apiResources([
