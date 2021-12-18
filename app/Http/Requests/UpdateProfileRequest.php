@@ -32,12 +32,12 @@ class UpdateProfileRequest extends FormRequest
             'name' => 'required',
             'avatar' => 'optional',
             'change_password' => 'bool',
-            'country_code' => 'required|numeric',
-            'phone' => [
-                'required',
-                'unique:users',
-                Rule::phone()->country(CountryCode::getCountriesIso()),
-            ],
+//            'country_code' => 'required|numeric',
+//            'phone' => [
+//                'required',
+//                'unique:users',
+//                Rule::phone()->country(CountryCode::getCountriesIso()),
+//            ],
         ];
     }
 
@@ -51,8 +51,8 @@ class UpdateProfileRequest extends FormRequest
         return [
             'name.required'           => 'Имя является обязательным',
             'phone.required'          => 'Номер телефона является обязательным',
-            'phone.phone'             => 'Номер телефона не валиден',
-            'phone.unique'            => 'Пользователь с таким телефоном уже зарегистрирован',
+//            'phone.phone'             => 'Номер телефона не валиден',
+//            'phone.unique'            => 'Пользователь с таким телефоном уже зарегистрирован',
 //            'password.required'       => 'Пароль является обязательным',
 //            'password.min'            => 'Пароль должен содержать минимум 8 символов',
 //            'password.confirmed'      => 'Пароли не совпадают',
