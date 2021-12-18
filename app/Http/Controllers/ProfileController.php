@@ -7,7 +7,6 @@ use App\Http\Resources\UserResource;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
 
 class ProfileController extends Controller
 {
@@ -85,6 +84,8 @@ class ProfileController extends Controller
             'is_active' => false,
             'deleted_at' => Carbon::now()->format("Y-m-d H:i:s")
         ]);
+
+        auth()->logout();
 
         return response()->json(
             ['message' => 'Ваш аккаунт успешно удалено']
