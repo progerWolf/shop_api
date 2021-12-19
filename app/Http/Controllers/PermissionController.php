@@ -64,7 +64,7 @@ class PermissionController extends Controller
 
             if (count($crud) !== 0) {
                 foreach ($crud as $permission) {
-                    $slug = strtolower($permission) . '-' . strtolower($request->resource);
+                    $slug = strtolower($request->resource) . '-' . strtolower($permission);
                     $displayName = ucwords($permission . ' ' . $request->resource);
                     $description = 'Даёт пользоватлю права на ' . strtolower($permission) . ' ' . strtolower($request->resource);
 
