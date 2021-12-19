@@ -8,7 +8,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
 
-class StoreUserRequest extends FormRequest
+class UpdateUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -31,11 +31,11 @@ class StoreUserRequest extends FormRequest
             'name' => 'required',
             'password' => 'required|string|confirmed|min:6',
             'country_code' => 'required|numeric',
-            'phone' => [
-                'required',
-                'unique:users',
-                Rule::phone()->country(CountryCode::getCountriesIso()),
-            ],
+//            'phone' => [
+//                'required',
+//                'unique:users',
+//                Rule::phone()->country(CountryCode::getCountriesIso()),
+//            ],
         ];
     }
 
@@ -48,12 +48,12 @@ class StoreUserRequest extends FormRequest
     {
         return [
             'name.required'           => 'Имя является обязательным',
-            'phone.required'          => 'Номер телефона является обязательным',
-            'phone.phone'             => 'Номер телефона не валиден',
-            'phone.unique'            => 'Пользователь с таким телефоном уже зарегистрирован',
-            'password.required'       => 'Пароль является обязательным',
-            'password.min'            => 'Пароль должен содержать минимум 8 символов',
-            'password.confirmed'      => 'Пароли не совпадают',
+//            'phone.required'          => 'Номер телефона является обязательным',
+//            'phone.phone'             => 'Номер телефона не валиден',
+//            'phone.unique'            => 'Пользователь с таким телефоном уже зарегистрирован',
+//            'password.required'       => 'Пароль является обязательным',
+//            'password.min'            => 'Пароль должен содержать минимум 8 символов',
+//            'password.confirmed'      => 'Пароли не совпадают',
             'country_code.required'     => 'Код страны яквляется обязательным',
             'country_code.numeric'      => 'Код страны должен быт числом'
         ];

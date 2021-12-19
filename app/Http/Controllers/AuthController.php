@@ -69,6 +69,7 @@ class AuthController extends Controller
     /**
      * Register a User.
      *
+     * @param RegisterRequest $request
      * @return JsonResponse
      */
     public function register(RegisterRequest $request): JsonResponse
@@ -263,7 +264,7 @@ class AuthController extends Controller
             'message' => 'Ваш пароль успешно обновлен'
         ]);
     }
-  
+
     private function checkAndFormatNumberCountry(&$request)
     {
         $object = new PhoneNumber($request->phone);
