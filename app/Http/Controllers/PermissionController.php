@@ -111,10 +111,7 @@ class PermissionController extends Controller
         $permission->id = $id;
         $permission->name = $request->name;
         $permission->display_name = $request->display_name;
-
-        if (isset($request->description) && !empty($request->description)) {
-            $permission->description = $request->description;
-        }
+        $permission->description = $request->description;
 
         if (!$permission->save()) {
             return response()->json([
