@@ -7,7 +7,6 @@ use App\Http\Resources\UserResource;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
 
 class ProfileController extends Controller
 {
@@ -31,10 +30,10 @@ class ProfileController extends Controller
      */
     public function update(UpdateProfileRequest $request): UserResource|JsonResponse
     {
-        $checkCountry = checkAndFormatNumberCountry($request);
-        if ($checkCountry !== true) {
-            return $checkCountry;
-        }
+//        $checkCountry = checkAndFormatNumberCountry($request);
+//        if ($checkCountry !== true) {
+//            return $checkCountry;
+//        }
 
         $user = User::with('countryCode')->findOrFail(auth()->user()->id);
 
@@ -53,9 +52,9 @@ class ProfileController extends Controller
             $user->update([
                 'name' => $request->name,
                 'avatar' => $request->avatar,
-                'phone' => $request->phone,
                 'password' => $request->password,
-                'country_code_id' => $request->country_code
+//                'phone' => $request->phone,
+//                'country_code_id' => $request->country_code
             ]);
 
             return new UserResource($user);
@@ -64,8 +63,8 @@ class ProfileController extends Controller
         $user->update([
             'name' => $request->name,
             'avatar' => $request->avatar,
-            'phone' => $request->phone,
-            'country_code_id' => $request->country_code
+//            'phone' => $request->phone,
+//            'country_code_id' => $request->country_code
         ]);
 
 
@@ -85,6 +84,8 @@ class ProfileController extends Controller
             'is_active' => false,
             'deleted_at' => Carbon::now()->format("Y-m-d H:i:s")
         ]);
+
+        auth()->logout();
 
         return response()->json(
             ['message' => 'Ваш аккаунт успешно удалено']

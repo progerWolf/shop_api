@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Carbon\Carbon;
@@ -65,18 +66,18 @@ class UserController extends Controller
      * @param StoreUserRequest $request
      * @return JsonResponse|UserResource
      */
-    public function update(StoreUserRequest $request, int $id): JsonResponse|UserResource
+    public function update(UpdateUserRequest $request, int $id): JsonResponse|UserResource
     {
-        $checkCountry = checkAndFormatNumberCountry($request);
-        if ($checkCountry !== true) {
-            return $checkCountry;
-        }
+//        $checkCountry = checkAndFormatNumberCountry($request);
+//        if ($checkCountry !== true) {
+//            return $checkCountry;
+//        }
 
         $user = User::with('countryCode')->where('id', $id);
 
         $user->update([
             'name' => $request->name,
-            'phone' => $request->phone,
+//            'phone' => $request->phone,
             'is_active' => $request->is_active,
             'password' => $request->password,
             'country_code_id' => $request->country_code

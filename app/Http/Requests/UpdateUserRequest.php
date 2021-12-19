@@ -7,18 +7,17 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
-use JetBrains\PhpStorm\ArrayShape;
 
-class UpdateProfileRequest extends FormRequest
+class UpdateUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
-    public function authorize(): bool
+    public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -26,13 +25,12 @@ class UpdateProfileRequest extends FormRequest
      *
      * @return array
      */
-    public function rules(): array
+    public function rules()
     {
         return [
             'name' => 'required',
-            'avatar' => 'optional',
-            'change_password' => 'bool',
-//            'country_code' => 'required|numeric',
+            'password' => 'required|string|confirmed|min:6',
+            'country_code' => 'required|numeric',
 //            'phone' => [
 //                'required',
 //                'unique:users',
@@ -50,7 +48,7 @@ class UpdateProfileRequest extends FormRequest
     {
         return [
             'name.required'           => 'Имя является обязательным',
-            'phone.required'          => 'Номер телефона является обязательным',
+//            'phone.required'          => 'Номер телефона является обязательным',
 //            'phone.phone'             => 'Номер телефона не валиден',
 //            'phone.unique'            => 'Пользователь с таким телефоном уже зарегистрирован',
 //            'password.required'       => 'Пароль является обязательным',
