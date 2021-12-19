@@ -18,7 +18,7 @@ class UpdateProfileRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -30,8 +30,10 @@ class UpdateProfileRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'avatar' => 'optional',
-            'change_password' => 'bool',
+            'avatar' => 'nullable',
+            'change_password' => 'required|boolean',
+            'current_password' => 'exclude_if:change_password,false|required|string|min:8',
+            'password' => 'exclude_if:change_password,false|required|string|confirmed|min:8'
 //            'country_code' => 'required|numeric',
 //            'phone' => [
 //                'required',
@@ -49,15 +51,15 @@ class UpdateProfileRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.required'           => 'Имя является обязательным',
+            'name.required'           => 'ФИО является обязательным',
             'phone.required'          => 'Номер телефона является обязательным',
 //            'phone.phone'             => 'Номер телефона не валиден',
 //            'phone.unique'            => 'Пользователь с таким телефоном уже зарегистрирован',
-//            'password.required'       => 'Пароль является обязательным',
-//            'password.min'            => 'Пароль должен содержать минимум 8 символов',
-//            'password.confirmed'      => 'Пароли не совпадают',
-            'country_code.required'     => 'Код страны яквляется обязательным',
-            'country_code.numeric'      => 'Код страны должен быт числом'
+            'password.required'       => 'Пароль является обязательным',
+            'password.min'            => 'Пароль должен содержать минимум 8 символов',
+            'password.confirmed'      => 'Пароли не совпадают',
+            'country_code.required'   => 'Код страны яквляется обязательным',
+            'country_code.numeric'    => 'Код страны должен быт числом'
         ];
     }
 

@@ -59,7 +59,7 @@ Route::group(['middleware' => ['api', 'auth'], 'prefix' => 'dashboard'], functio
 
 Route::group(['middleware' => ['api', 'auth'], 'prefix' => 'profile'], function ($router) {
     Route::get('/', [ProfileController::class, 'show']);
-    Route::put('/update', [ProfileController::class, 'update']);
+    Route::post('/update', [ProfileController::class, 'update']);
     Route::delete('/delete', [ProfileController::class, 'delete']);
 });
 

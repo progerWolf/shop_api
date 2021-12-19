@@ -7,6 +7,8 @@ use App\Http\Resources\UserResource;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
 {
@@ -30,20 +32,10 @@ class ProfileController extends Controller
      */
     public function update(UpdateProfileRequest $request): UserResource|JsonResponse
     {
-//        $checkCountry = checkAndFormatNumberCountry($request);
-//        if ($checkCountry !== true) {
-//            return $checkCountry;
-//        }
-
         $user = User::with('countryCode')->findOrFail(auth()->user()->id);
 
         if ($request->change_password) {
-            $request->validate([
-                'current_password' => 'required|string|min:6' ,
-                'password' => 'required|string|confirmed|min:6',
-            ]);
-
-            if ($user->password !== $request->current_password) {
+            if (!Hash::check($request->current_password, Auth::user()->password)) {
                 return response()->json([
                     'message' => 'Текущий пароль не верный.',
                 ], 403);
@@ -53,8 +45,6 @@ class ProfileController extends Controller
                 'name' => $request->name,
                 'avatar' => $request->avatar,
                 'password' => $request->password,
-//                'phone' => $request->phone,
-//                'country_code_id' => $request->country_code
             ]);
 
             return new UserResource($user);
@@ -63,10 +53,7 @@ class ProfileController extends Controller
         $user->update([
             'name' => $request->name,
             'avatar' => $request->avatar,
-//            'phone' => $request->phone,
-//            'country_code_id' => $request->country_code
         ]);
-
 
         return new UserResource($user);
     }
