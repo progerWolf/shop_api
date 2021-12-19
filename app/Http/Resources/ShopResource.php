@@ -23,13 +23,13 @@ class ShopResource extends JsonResource
             'phone' => $this->phone,
             'image' => $this->image,
             'user_id' => $this->user_id,
-            'product_category_id' => $this->product_category_id,
+            'category_id' => $this->category_id,
             'opening_hour' => $this->opening_hour,
             'closing_hour' => $this->closing_hour,
             'delivery_price' => $this->delivery_price,
             'purchase' => $this->purchase,
             'status' => $this->status,
-            'product_category' => $this->product_category
+            'category' => $this->category
         ];
 
         // return parent::toArray($request);

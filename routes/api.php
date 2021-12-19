@@ -3,7 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CountryCodeController;
 use App\Http\Controllers\PermissionController;
-use App\Http\Controllers\ProductCategoryController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ShopController;
@@ -35,9 +35,10 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
 
 Route::get('countrycode', [CountryCodeController::class, 'index']);
 Route::post('image', [UploadFileController::class, 'uploadImageFile']);
-Route::resource('categories', ProductCategoryController::class);
 Route::resource('shops', ShopController::class);
 Route::resource('products', ProductController::class);
+Route::resource('categories', CategoryController::class);
+Route::get("get-products-by-id", [ProductController::class, "getProductsById"]);
 
 Route::group(['middleware' => ['api', 'auth'], 'prefix' => 'dashboard'], function ($router) {
     Route::apiResources([

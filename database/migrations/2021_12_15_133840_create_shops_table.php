@@ -19,10 +19,10 @@ class CreateShopsTable extends Migration
             $table->string('slug');
             $table->string('address');
             $table->text('description')->nullable();
-            $table->string('phone');
+        $table->string('phone');
             $table->string('image');
             $table->foreignId('user_id');
-            $table->foreignId('product_category_id');
+            $table->foreignId('category_id');
             $table->string('opening_hour')->nullable();
             $table->string('closing_hour')->nullable();
             $table->float('delivery_price')->default(0.0);

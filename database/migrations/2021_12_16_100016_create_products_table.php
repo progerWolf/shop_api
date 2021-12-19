@@ -21,9 +21,10 @@ class CreateProductsTable extends Migration
             $table->text('images');
             $table->float('price');
             $table->foreignId('user_id');
-            $table->foreignId('product_category_id')->nullable();
+            $table->foreignId('category_id')->nullable();
             $table->foreignId('shop_id');
             $table->integer('status')->default(0);
+            $table->integer('quantity')->default(1);
             $table->timestamps();
         });
     }

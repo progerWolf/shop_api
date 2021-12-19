@@ -20,7 +20,7 @@ class Shop extends Model
         'phone',
         'image',
         'user_id',
-        'product_category_id',
+        'category_id',
         'opening_hour',
         'closing_hour',
         'delivery_price',
@@ -55,7 +55,7 @@ class Shop extends Model
             ->saveSlugsTo('slug');
     }
 
-    public function product_category() {
-        return $this->belongsTo(ProductCategory::class);
+    public function category() {
+        return $this->belongsTo(Category::class);
     }
 }

@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\ShopResource;
-use App\Models\Shop;
+use App\Http\Resources\CategoryResource;
+use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
-class ShopController extends Controller
+class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,19 +16,13 @@ class ShopController extends Controller
      */
     public function index(Request $request)
     {
-        $shops = Shop::with('category:id,name')->where('status', Shop::STATUS_PUBLISHE);
+        $categories = Category::where('is_active', 1);
 
-        if($request->category_slug) {
-            $shops->whereHas('category', function($q) use ($request) {
-                $q->where('slug', $request->category_slug);
-            }); 
-        }
+        // if ($request->slug) {
+        //     $categories->where('slug', $request->slug);
+        // }
 
-        if($request->q) {
-            $shops->where('name', 'like', "%$request->q%")->whereOr('description', 'like', "%$request->q%");
-        }
-
-        return ShopResource::collection($shops->paginate(12));
+        return CategoryResource::collection($categories->get());
     }
 
     /**
@@ -54,21 +49,21 @@ class ShopController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Shop  $shop
+     * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function show(Shop $shop)
+    public function show(Category $category)
     {
-        return new ShopResource($shop->load('category:id,name,slug'));
+        return new CategoryResource($category);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Shop  $shop
+     * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function edit(Shop $shop)
+    public function edit(Category $category)
     {
         //
     }
@@ -77,10 +72,10 @@ class ShopController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Shop  $shop
+     * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Shop $shop)
+    public function update(Request $request, Category $category)
     {
         //
     }
@@ -88,10 +83,10 @@ class ShopController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Shop  $shop
+     * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Shop $shop)
+    public function destroy(Category $category)
     {
         //
     }

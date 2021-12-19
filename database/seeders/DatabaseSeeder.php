@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call(CountryCodeSeeder::class);
-        $this->call(ProductCategorySeeder::class);
+        $this->call(CategorySeeder::class);
         $this->call(ShopSeeder::class);
         $this->call(ProductSeeder::class);
         $this->call(LaratrustSeeder::class);

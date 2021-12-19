@@ -22,7 +22,7 @@ class ShopSeeder extends Seeder
                 'phone' => "+992 (000) 2345 33",
                 'image' => '/market.jpeg',
                 'user_id' => 1,
-                'product_category_id' => $i == 0 ? 1 : random_int(1, 5),
+                'category_id' => $i == 0 ? 1 : random_int(1, 5),
                 'opening_hour' => '09:00',
                 'closing_hour' => '17:00',
                 'delivery_price' => random_int(10, 100),

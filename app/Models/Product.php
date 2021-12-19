@@ -19,9 +19,10 @@ class Product extends Model
         'images',
         'price',
         'user_id',
-        'product_category_id',
+        'category_id',
         'shop_id',
         'status',
+        'quantity'
     ];
 
     protected $casts = [
@@ -51,8 +52,8 @@ class Product extends Model
             ->saveSlugsTo('slug');
     }
 
-    public function product_category() {
-        return $this->belongsTo(ProductCategory::class);
+    public function category() {
+        return $this->belongsTo(Category::class);
     }
 
     public function shop() {
