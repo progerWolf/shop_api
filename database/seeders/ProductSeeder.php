@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Product;
-use App\Models\ProductCategory;
+use App\Models\Category;
 use Illuminate\Database\Seeder;
 
 class ProductSeeder extends Seeder
@@ -26,9 +26,10 @@ class ProductSeeder extends Seeder
                 ],
                 'price' => random_int(1, 1000),
                 'user_id' => 1,
-                'product_category_id' => ProductCategory::select('id')->where('parent_id', 1)->inRandomOrder()->first()->id,
+                'category_id' => Category::select('id')->where('parent_id', 1)->inRandomOrder()->first()->id,
                 'shop_id' => 1,
                 'status' => Product::STATUS_PUBLISHED,
+                'quantity' => random_int(0, 10)
             ]);
         }
     }

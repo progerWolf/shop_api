@@ -2,26 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\ProductCategoryResource;
-use App\Models\ProductCategory;
+use App\Models\Attribute;
 use Illuminate\Http\Request;
 
-class ProductCategoryController extends Controller
+class AttributeController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $categories = ProductCategory::where('is_active', 1);
-
-        // if ($request->slug) {
-        //     $categories->where('slug', $request->slug);
-        // }
-
-        return ProductCategoryResource::collection($categories->get());
+        //
     }
 
     /**
@@ -48,21 +41,21 @@ class ProductCategoryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\ProductCategory  $productCategory
+     * @param  \App\Models\Attribute  $attribute
      * @return \Illuminate\Http\Response
      */
-    public function show(ProductCategory $slug)
+    public function show(Attribute $attribute)
     {
-        return new ProductCategoryResource($slug);
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\ProductCategory  $productCategory
+     * @param  \App\Models\Attribute  $attribute
      * @return \Illuminate\Http\Response
      */
-    public function edit(ProductCategory $productCategory)
+    public function edit(Attribute $attribute)
     {
         //
     }
@@ -71,10 +64,10 @@ class ProductCategoryController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\ProductCategory  $productCategory
+     * @param  \App\Models\Attribute  $attribute
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ProductCategory $productCategory)
+    public function update(Request $request, Attribute $attribute)
     {
         //
     }
@@ -82,10 +75,10 @@ class ProductCategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\ProductCategory  $productCategory
+     * @param  \App\Models\Attribute  $attribute
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ProductCategory $productCategory)
+    public function destroy(Attribute $attribute)
     {
         //
     }

@@ -2,32 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\ShopResource;
-use App\Models\Shop;
+use App\Models\AttributeGroup;
 use Illuminate\Http\Request;
 
-class ShopController extends Controller
+class AttributeGroupController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $shops = Shop::with('category:id,name')->where('status', Shop::STATUS_PUBLISHE);
-
-        if($request->category_slug) {
-            $shops->whereHas('category', function($q) use ($request) {
-                $q->where('slug', $request->category_slug);
-            }); 
-        }
-
-        if($request->q) {
-            $shops->where('name', 'like', "%$request->q%")->whereOr('description', 'like', "%$request->q%");
-        }
-
-        return ShopResource::collection($shops->paginate(12));
+        //
     }
 
     /**
@@ -54,21 +41,21 @@ class ShopController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Shop  $shop
+     * @param  \App\Models\AttributeGroup  $attributeGroup
      * @return \Illuminate\Http\Response
      */
-    public function show(Shop $shop)
+    public function show(AttributeGroup $attributeGroup)
     {
-        return new ShopResource($shop->load('category:id,name,slug'));
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Shop  $shop
+     * @param  \App\Models\AttributeGroup  $attributeGroup
      * @return \Illuminate\Http\Response
      */
-    public function edit(Shop $shop)
+    public function edit(AttributeGroup $attributeGroup)
     {
         //
     }
@@ -77,10 +64,10 @@ class ShopController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Shop  $shop
+     * @param  \App\Models\AttributeGroup  $attributeGroup
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Shop $shop)
+    public function update(Request $request, AttributeGroup $attributeGroup)
     {
         //
     }
@@ -88,10 +75,10 @@ class ShopController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Shop  $shop
+     * @param  \App\Models\AttributeGroup  $attributeGroup
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Shop $shop)
+    public function destroy(AttributeGroup $attributeGroup)
     {
         //
     }

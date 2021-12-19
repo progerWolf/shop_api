@@ -16,7 +16,7 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $products = Product::with('shop:id,name,slug', 'product_category:id,name,slug')->where('status', Product::STATUS_PUBLISHED);
+        $products = Product::with('shop:id,name,slug', 'category:id,name,slug')->where('status', Product::STATUS_PUBLISHED);
         if ($request->shop_slug) {
             $products->whereHas('shop', function($q) use ($request) {
                 $q->where('slug', $request->shop_slug);
@@ -89,5 +89,14 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         //
+    }
+
+    public function getProductsById(Request $request)
+    {
+        if ($request->products) {
+            $products = Product::with('shop:id,name,slug', 'category:id,name,slug')->where('status', Product::STATUS_PUBLISHED)->whereIn('id', $request->products)->get();
+            return ProductResource::collection($products);
+        }
+        abort(404);
     }
 }

@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\ProductCategory;
+use App\Models\Category;
 use Illuminate\Database\Seeder;
 
-class ProductCategorySeeder extends Seeder
+class CategorySeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,67 +14,67 @@ class ProductCategorySeeder extends Seeder
      */
     public function run()
     {
-        ProductCategory::create([
+        Category::create([
             'name' => 'Все рестораны',
             'image' => '/images/rest.png',
             'short_desc'  => 'Lorem ipsum dolor sit amet, . Iusto, sunt!',
             'is_active' => 1
         ]);
 
-        ProductCategory::create([
+        Category::create([
             'name' => 'Все магазины',
             'image' => '/images/shop.jpg',
             'short_desc'  => 'Lorem, consectetur adipisicing elit. Iusto, sunt!',
             'is_active' => 1
         ]);
 
-        ProductCategory::create([
+        Category::create([
             'name' => 'Напитки',
             'image' => '/images/napitki.jpg',
             'short_desc'  => 'Lorem amet, consectetur adipisicing elit. Iusto, sunt!',
             'is_active' => 1
         ]);
 
-        ProductCategory::create([
+        Category::create([
             'name' => 'Лекарство',
             'image' => '/images/lekarstvo.jpg',
             'short_desc'  => 'Sit amet adipisicing elit. Iusto, sunt!',
             'is_active' => 1
         ]);
 
-        ProductCategory::create([
+        Category::create([
             'name' => 'Пицца',
             'image' => '/images/pizza.png',
             'short_desc'  => 'Lorem ipsum dolor sit amet, consectetur!',
             'is_active' => 1
         ]);
 
-        ProductCategory::create([
+        Category::create([
             'name' => 'Бургеры',
             'image' => '/images/burger.png',
             'short_desc'  => 'Lorem ipsum dolor sit amet, . Iusto, sunt!',
             'is_active' => 1
         ]);
 
-        ProductCategory::create([
+        Category::create([
             'name' => 'Блюда',
             'parent_id' => 1,
             'is_active' => 1
         ]);
 
-        ProductCategory::create([
+        Category::create([
             'name' => 'закуски',
             'parent_id' => 1,
             'is_active' => 1
         ]);
 
-        ProductCategory::create([
+        Category::create([
             'name' => 'Мёд',
             'parent_id' => 1,
             'is_active' => 1
         ]);
 
-        ProductCategory::create([
+        Category::create([
             'name' => 'Напитки',
             'parent_id' => 1,
             'is_active' => 1
