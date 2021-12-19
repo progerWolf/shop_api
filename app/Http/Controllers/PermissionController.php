@@ -7,7 +7,6 @@ use App\Http\Requests\UpdatePermissionRequest;
 use App\Http\Resources\PermissionResource;
 use App\Models\Permission;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
@@ -112,10 +111,7 @@ class PermissionController extends Controller
         $permission->id = $id;
         $permission->name = $request->name;
         $permission->display_name = $request->display_name;
-
-        if (isset($request->description) && !empty($request->description)) {
-            $permission->description = $request->description;
-        }
+        $permission->description = $request->description;
 
         if (!$permission->save()) {
             return response()->json([
