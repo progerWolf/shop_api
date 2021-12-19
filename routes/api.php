@@ -1,17 +1,15 @@
 <?php
 
-use App\Http\Controllers\CountryCodeController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\UploadFileController;
-use App\Http\Controllers\UserController;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\HomeController;
+use App\Http\Controllers\CountryCodeController;
+use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ShopController;
-use App\Models\ProductCategory;
+use App\Http\Controllers\UploadFileController;
+use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,11 +46,14 @@ Route::group(['middleware' => ['api', 'auth'], 'prefix' => 'dashboard'], functio
     Route::apiResources([
         'user' => UserController::class
     ]);
+    Route::apiResources([
+        'permission' => PermissionController::class,
+    ]);
 });
 
 Route::group(['middleware' => ['api', 'auth'], 'prefix' => 'profile'], function ($router) {
     Route::get('/', [ProfileController::class, 'show']);
-    Route::post('/update', [ProfileController::class, 'update']);
-    Route::post('/delete', [ProfileController::class, 'delete']);
+    Route::put('/update', [ProfileController::class, 'update']);
+    Route::delete('/delete', [ProfileController::class, 'delete']);
 });
 
