@@ -46,9 +46,14 @@ Route::group(['middleware' => ['api', 'auth'], 'prefix' => 'dashboard'], functio
     Route::apiResources([
         'user' => UserController::class
     ]);
-    Route::apiResources([
+    Route::apiResources(
+        [
         'permission' => PermissionController::class,
-    ]);
+        ],
+        [
+            'except' => ['destroy']
+        ]
+    );
 });
 
 Route::group(['middleware' => ['api', 'auth'], 'prefix' => 'profile'], function ($router) {
