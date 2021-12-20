@@ -6,6 +6,7 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\UploadFileController;
 use App\Http\Controllers\UserController;
@@ -40,20 +41,16 @@ Route::resource('shops', ShopController::class);
 Route::resource('products', ProductController::class);
 
 Route::group(['middleware' => ['api', 'auth'], 'prefix' => 'dashboard'], function ($router) {
-    Route::apiResources([
-        'countrycode' => CountryCodeController::class,
-    ]);
-    Route::apiResources([
-        'user' => UserController::class
-    ]);
-    Route::apiResources(
-        [
-        'permission' => PermissionController::class,
-        ],
+    Route::apiResource('countrycode', CountryCodeController::class,);
+    Route::apiResource('user', UserController::class);
+    Route::apiResource(
+        'permissions',
+        PermissionController::class,
         [
             'except' => ['destroy']
         ]
     );
+    Route::apiResource('roles', RoleController::class);
 });
 
 Route::group(['middleware' => ['api', 'auth'], 'prefix' => 'profile'], function ($router) {
