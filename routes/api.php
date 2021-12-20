@@ -62,5 +62,8 @@ Route::group(['middleware' => ['api', 'auth'], 'prefix' => 'profile'], function 
     Route::get('/', [ProfileController::class, 'show']);
     Route::put('/update', [ProfileController::class, 'update']);
     Route::delete('/delete', [ProfileController::class, 'delete']);
+    Route::apiResource('partnership-proposal', PartnershipProposalController::class,[
+        'except' => ['index']
+    ]);
 });
 
