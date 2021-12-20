@@ -10,6 +10,23 @@ use Laravel\Sanctum\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Laratrust\Traits\LaratrustUserTrait;
 
+/**
+ * User Model
+ *
+ * @property $id
+ * @property $name
+ * @property $phone
+ * @property $password
+ * @property $avatar
+ * @property $is_active
+ * @property $country_code_id
+ * @property $partnership_proposal_id
+ *
+ * @method static user where($column, $operator = null, $value = null, $boolean = 'and')
+ * @method static User first($columns = ['*'])
+ * @method static User create(array $attributes = [])
+ */
+
 class User extends Authenticatable implements JWTSubject
 {
     use LaratrustUserTrait;
