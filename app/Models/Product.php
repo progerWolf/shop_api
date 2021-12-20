@@ -12,6 +12,10 @@ class Product extends Model
     use HasFactory;
     use HasSlug;
 
+    public const STATUS_NEW                 = 0;
+    public const STATUS_IN_MODERATION       = 1;
+    public const STATUS_PUBLISHED           = 2;
+
     protected $fillable = [
         'name',
         'slug',
@@ -40,10 +44,6 @@ class Product extends Model
     {
         return 'slug';
     }
-
-    public const STATUS_NEW                 = 0;
-    public const STATUS_IN_MODERATION       = 1;
-    public const STATUS_PUBLISHED           = 2;
 
     public function getSlugOptions() : SlugOptions
     {
