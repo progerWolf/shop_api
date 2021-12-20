@@ -6,6 +6,7 @@ use App\Http\Requests\StorePartnershipProposalRequest;
 use App\Http\Requests\UpdatePartnershipProposalRequest;
 use App\Http\Resources\PartnershipProposalResource;
 use App\Models\PartnershipProposal;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
@@ -33,6 +34,8 @@ class PartnershipProposalController extends Controller
         //TODO Checking roles and permissions after ACL end
         $partnershipProposal = new PartnershipProposal();
 
+        $user = User::where('id', $request->user_id)->first();
+
         $partnershipProposal->user_id = $request->user_id;//auth()->user()->id;
         $partnershipProposal->passport_front_side = $request->passport_front_side;
         $partnershipProposal->passport_back_side = $request->passport_back_side;
@@ -44,6 +47,9 @@ class PartnershipProposalController extends Controller
                 'message' => 'Произошла ошибка создании запроса проверте данные'
             ], 400);
         }
+
+        $user->partnership_proposal_id = $partnershipProposal->id;
+        $user->save();
 
         return new PartnershipProposalResource($partnershipProposal);
     }
