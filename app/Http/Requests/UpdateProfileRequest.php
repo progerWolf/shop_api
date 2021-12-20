@@ -30,7 +30,7 @@ class UpdateProfileRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'avatar' => 'nullable',
+            'avatar' => 'sometimes',
             'change_password' => 'required|boolean',
             'current_password' => 'exclude_if:change_password,false|required|string|min:8',
             'password' => 'exclude_if:change_password,false|required|string|confirmed|min:8'
