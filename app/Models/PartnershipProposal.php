@@ -5,6 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * PartnershipProposal Model
+ *
+ * @property $id
+ * @property $user_id
+ * @property $passport_front_side
+ * @property $passport_back_side
+ * @property $selfie_with_passport
+ * @property $type
+ * @property $status
+ * @method static PartnershipProposal create(array $attributes = [])
+ */
+
 class PartnershipProposal extends Model
 {
     use HasFactory;
