@@ -47,11 +47,13 @@ Route::group(['middleware' => ['api', 'auth'], 'prefix' => 'dashboard'], functio
     Route::apiResource(
         'permissions',
         PermissionController::class,
-        [
-            'except' => ['destroy']
-        ]
+        ['except' => ['destroy']]
     );
-    Route::apiResource('roles', RoleController::class);
+    Route::apiResource(
+        'roles',
+        RoleController::class,
+        ['except' => ['destroy']]
+    );
 });
 
 Route::group(['middleware' => ['api', 'auth'], 'prefix' => 'profile'], function ($router) {
