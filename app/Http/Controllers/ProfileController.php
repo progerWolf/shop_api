@@ -20,7 +20,7 @@ class ProfileController extends Controller
      */
     public function show(): UserResource
     {
-        $user = User::with('countryCode')->find(auth()->user()->id);
+        $user = User::with('countryCode', 'partnershipProposal')->find(auth()->user()->id);
         return new UserResource($user);
     }
 
