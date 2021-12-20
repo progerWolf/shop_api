@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\PartnershipProposal;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -15,13 +16,15 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // \App\Models\User::factory(10)->create();
-        User::create([
-            'name' => "Test User",
-            'phone' => "+992000000000",
-            'password' => "password",
-            'is_active' => 1,
-            'country_code_id' => 2
-        ]);
+
+        $users = User::factory(10)->create();
+
+        $users->each(function ($user){
+            $partnershipProposal = PartnershipProposal::factory(1)->create(['user_id' => $user->id]);
+            $partnershipProposalId = $partnershipProposal->pluck('id')[0];
+            $user->partnership_proposal_id = $partnershipProposalId;
+            $user->save();
+        });
 
         $this->call(CountryCodeSeeder::class);
         $this->call(CategorySeeder::class);
