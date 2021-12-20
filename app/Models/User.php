@@ -26,7 +26,8 @@ class User extends Authenticatable implements JWTSubject
         'password',
         'avatar',
         'is_active',
-        'country_code_id'
+        'country_code_id',
+        'partnership_proposal_id'
     ];
 
     /**
@@ -78,6 +79,11 @@ class User extends Authenticatable implements JWTSubject
 
     public function countryCode(): BelongsTo
     {
-        return $this->belongsTo(CountryCode::class);
+        return $this->belongsTo(CountryCode::class, 'country_code_id');
+    }
+
+    public function partnershipProposal()
+    {
+        return $this->hasOne(PartnershipProposal::class);
     }
 }

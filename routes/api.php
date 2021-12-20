@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CountryCodeController;
+use App\Http\Controllers\PartnershipProposalController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
@@ -54,6 +55,7 @@ Route::group(['middleware' => ['api', 'auth'], 'prefix' => 'dashboard'], functio
         RoleController::class,
         ['except' => ['destroy']]
     );
+    Route::apiResource('partnership-proposals', PartnershipProposalController::class);
 });
 
 Route::group(['middleware' => ['api', 'auth'], 'prefix' => 'profile'], function ($router) {

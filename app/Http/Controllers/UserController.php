@@ -55,7 +55,7 @@ class UserController extends Controller
      */
     public function show(int $id): UserResource
     {
-        $user = User::with('countryCode')->findOrFail($id);
+        $user = User::with('countryCode', 'partnershipProposal')->findOrFail($id);
         return new UserResource($user);
     }
 
