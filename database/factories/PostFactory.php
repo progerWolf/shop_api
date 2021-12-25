@@ -19,7 +19,7 @@ class PostFactory extends Factory
             'description' => $this->faker->paragraph(100, true),
             'short_description' => $this->faker->paragraph(50, true),
             'image' => $this->faker->image(),
-            'is_active' => true,
+            'is_active' => $this->faker->boolean,
             'type' => $this->faker->randomElement(['post', 'about'])
         ];
     }

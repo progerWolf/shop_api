@@ -30,7 +30,7 @@ class StorePostRequest extends FormRequest
             'description' => 'required|string|min:100',
             'image' => 'required|string',
             'is_active' => 'boolean',
-            'type' => 'required|string'
+            'type' => 'in:post,about'
         ];
     }
 
@@ -48,9 +48,9 @@ class StorePostRequest extends FormRequest
             'type.required'                 => 'Тип поста является обязательным',
             'title.string'                  => 'Имя поста должна быть строкой',
             'description.string'            => 'Описание поста должна быть строкой',
-            'type.string'                   => 'Тип поста должна быть строкой',
             'title.min'                     => 'Имя поста должен содержать минимум 10 символов',
-            'description.min'               => 'Описание поста должен содержать минимум 100 символов'
+            'description.min'               => 'Описание поста должен содержать минимум 100 символов',
+            'type.in'                       => 'Указанный вами тип не найден'
         ];
     }
 
