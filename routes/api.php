@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CountryCodeController;
+use App\Http\Controllers\FaqController;
 use App\Http\Controllers\PartnershipProposalController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\CategoryController;
@@ -44,6 +45,8 @@ Route::resource('categories', CategoryController::class);
 Route::get("get-products-by-id", [ProductController::class, "getProductsById"]);
 Route::get('posts', [PostController::class, 'index']);
 Route::get('posts', [PostController::class, 'show']);
+Route::get('faqs', [FaqController::class, 'index']);
+Route::get('faqs', [FaqController::class, 'show']);
 
 Route::group(['middleware' => ['api', 'auth'], 'prefix' => 'dashboard'], function ($router) {
     Route::apiResource('countrycode', CountryCodeController::class,);
@@ -60,6 +63,7 @@ Route::group(['middleware' => ['api', 'auth'], 'prefix' => 'dashboard'], functio
     );
     Route::apiResource('partnership-proposals', PartnershipProposalController::class);
     Route::apiResource('posts', PostController::class);
+    Route::apiResource('faqs', FaqController::class);
 });
 
 Route::group(['middleware' => ['api', 'auth'], 'prefix' => 'profile'], function ($router) {
@@ -70,5 +74,6 @@ Route::group(['middleware' => ['api', 'auth'], 'prefix' => 'profile'], function 
         'except' => ['index']
     ]);
     Route::apiResource('posts', PostController::class);
+    Route::apiResource('faqs', FaqController::class);
 });
 
