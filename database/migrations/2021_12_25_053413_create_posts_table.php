@@ -21,7 +21,10 @@ class CreatePostsTable extends Migration
             $table->text('short_description');
             $table->string('image');
             $table->boolean('is_active')->default(false);
-            $table->string('type');
+            $table->enum('type', [
+                'post',
+                'about'
+            ])->default('post');
             $table->timestamps();
         });
     }
