@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\PartnershipProposal;
+use App\Models\Post;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -19,17 +20,23 @@ class DatabaseSeeder extends Seeder
 
         $users = User::factory(10)->create();
 
+        $posts = Post::factory(50)->create();
+
+        $this->createPartnershipProposalsForUsers($users);
+        $this->call(CountryCodeSeeder::class);
+        $this->call(CategorySeeder::class);
+        $this->call(ShopSeeder::class);
+        $this->call(ProductSeeder::class);
+        $this->call(LaratrustSeeder::class);
+    }
+
+    private function createPartnershipProposalsForUsers($users): void
+    {
         $users->each(function ($user){
             $partnershipProposal = PartnershipProposal::factory(1)->create(['user_id' => $user->id]);
             $partnershipProposalId = $partnershipProposal->pluck('id')[0];
             $user->partnership_proposal_id = $partnershipProposalId;
             $user->save();
         });
-
-        $this->call(CountryCodeSeeder::class);
-        $this->call(CategorySeeder::class);
-        $this->call(ShopSeeder::class);
-        $this->call(ProductSeeder::class);
-        $this->call(LaratrustSeeder::class);
     }
 }
