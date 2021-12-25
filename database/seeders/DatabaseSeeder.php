@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Faq;
 use App\Models\PartnershipProposal;
 use App\Models\Post;
 use App\Models\User;
@@ -19,8 +20,8 @@ class DatabaseSeeder extends Seeder
         // \App\Models\User::factory(10)->create();
 
         $users = User::factory(10)->create();
-
         $posts = Post::factory(50)->create();
+        $faqs = Faq::factory(50)->create();
 
         $this->createPartnershipProposalsForUsers($users);
         $this->call(CountryCodeSeeder::class);
