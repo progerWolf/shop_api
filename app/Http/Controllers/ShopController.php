@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ShopRequest;
 use App\Http\Resources\ShopResource;
+use App\Models\Product;
 use App\Models\Shop;
 use Illuminate\Http\Request;
 
@@ -20,7 +22,7 @@ class ShopController extends Controller
         if($request->category_slug) {
             $shops->whereHas('category', function($q) use ($request) {
                 $q->where('slug', $request->category_slug);
-            }); 
+            });
         }
 
         if($request->q) {
@@ -31,24 +33,19 @@ class ShopController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ShopRequest $request)
     {
-        //
+        $shop = Shop::create($request->all() + [
+            'status'  => Shop::STATUS_NEW,
+            'user_id' => auth()->user()->id
+        ]);
+
+        return new ShopResource($shop->load('category:id,name,slug'));
     }
 
     /**
@@ -63,17 +60,6 @@ class ShopController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Shop  $shop
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Shop $shop)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -82,7 +68,11 @@ class ShopController extends Controller
      */
     public function update(Request $request, Shop $shop)
     {
-        //
+        $shop->update($request->all() + [
+            'status'  => Shop::STATUS_NEW
+        ]);
+
+        return new ShopResource($shop->load('category:id,name,slug'));
     }
 
     /**
@@ -93,6 +83,19 @@ class ShopController extends Controller
      */
     public function destroy(Shop $shop)
     {
-        //
+        if($shop->user_id === auth()->user()->id) {
+            Product::where('shop_id', $shop->id)->delete();
+            $shop->delete();
+            return response()->json([
+                'message' => 'Магазин с продуктами успешно удалено'
+            ]);
+        }
+
+        abort(404);
+    }
+
+    public function getUserShops() {
+        $shops = Shop::where('user_id', auth()->user()->id)->get();
+        return ShopResource::collection($shops);
     }
 }

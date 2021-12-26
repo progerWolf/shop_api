@@ -19,7 +19,7 @@ class CreateShopsTable extends Migration
             $table->string('slug');
             $table->string('address');
             $table->text('description')->nullable();
-        $table->string('phone');
+            $table->string('phone');
             $table->string('image');
             $table->foreignId('user_id');
             $table->foreignId('category_id');

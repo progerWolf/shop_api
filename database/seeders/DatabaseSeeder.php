@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Http\Resources\AttributeGroupResource;
 use App\Models\Faq;
 use App\Models\PartnershipProposal;
 use App\Models\Post;
@@ -39,5 +40,13 @@ class DatabaseSeeder extends Seeder
             $user->partnership_proposal_id = $partnershipProposalId;
             $user->save();
         });
+
+        $this->call(CountryCodeSeeder::class);
+        $this->call(CategorySeeder::class);
+        $this->call(ShopSeeder::class);
+        $this->call(ProductSeeder::class);
+        $this->call(LaratrustSeeder::class);
+        $this->call(AttributeGroupSeeder::class);
+        $this->call(AttributeSeeder::class);
     }
 }
