@@ -90,4 +90,14 @@ class CategoryController extends Controller
     {
         //
     }
+
+    public function subcategories($id)
+    {
+        $subcategories = Category::where([
+            'is_active' => 1,
+            'parent_id' => $id
+        ])->get();
+
+        return CategoryResource::collection($subcategories);
+    }
 }

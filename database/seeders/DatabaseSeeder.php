@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Http\Resources\AttributeGroupResource;
 use App\Models\PartnershipProposal;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -31,5 +32,8 @@ class DatabaseSeeder extends Seeder
         $this->call(ShopSeeder::class);
         $this->call(ProductSeeder::class);
         $this->call(LaratrustSeeder::class);
+        $this->call(AttributeGroupSeeder::class);
+        $this->call(AttributeSeeder::class);
+        $this->call(AttributeSeeder::class);
     }
 }

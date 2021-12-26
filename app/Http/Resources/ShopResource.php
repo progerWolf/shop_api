@@ -16,6 +16,7 @@ class ShopResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'id' => $this->id,
             'name' => $this->name,
             'slug' => $this->slug,
             'address' => $this->address,
@@ -29,7 +30,9 @@ class ShopResource extends JsonResource
             'delivery_price' => $this->delivery_price,
             'purchase' => $this->purchase,
             'status' => $this->status,
-            'category' => $this->category
+            'category' => $this->category,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at
         ];
 
         // return parent::toArray($request);
