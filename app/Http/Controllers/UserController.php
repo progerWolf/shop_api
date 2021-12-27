@@ -7,8 +7,11 @@ use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -18,9 +21,22 @@ class UserController extends Controller
      *
      * @return AnonymousResourceCollection
      */
-    public function index(): AnonymousResourceCollection
+    public function index(Request $request): AnonymousResourceCollection
     {
-        $users = User::orderBy('id', 'desc')->paginate(20);
+        $builder = User::with('roles');
+
+        if (Auth::user()->hasRole('admin')) {
+            if ($request->has('role')) {
+                $role = mb_strtolower($request->get('role'));
+
+                $builder->whereHas('roles', function($query) use ($role) {
+                    return $query->where('name', $role)->orWhere('display_name', $role);
+                });
+            }
+        }
+
+        $users = $builder->paginate(20);
+
         return UserResource::collection($users);
     }
 
