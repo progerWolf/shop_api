@@ -9,6 +9,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -55,15 +56,15 @@ class UserController extends Controller
      */
     public function show(int $id): UserResource
     {
-        $user = User::with('countryCode', 'partnershipProposal')->findOrFail($id);
+        $user = User::with('countryCode', 'partnershipProposal', 'roles')->findOrFail($id);
         return new UserResource($user);
     }
 
     /**
      * Update the specified resource in storage.
      *
+     * @param UpdateUserRequest $request
      * @param int $id
-     * @param StoreUserRequest $request
      * @return JsonResponse|UserResource
      */
     public function update(UpdateUserRequest $request, int $id): JsonResponse|UserResource
@@ -73,16 +74,23 @@ class UserController extends Controller
 //            return $checkCountry;
 //        }
 
-        $user = User::with('countryCode')->where('id', $id);
+        $user = User::findOrfail($id);
+        $user->name = $request->name;
+        $user->is_active = $request->is_active;
 
-        $user->update([
-            'name' => $request->name,
-//            'phone' => $request->phone,
-            'is_active' => $request->is_active,
-            'password' => $request->password,
-            'country_code_id' => $request->country_code
-        ]);
+        if ($request->change_password_type === 'auto') {
+            //TODO create auto password generator
+            $autoPassword = '';
+//            $user->password = Hash::make($autoPassword);
+        }
+        if ($request->change_password_type === 'manual') {
+            $user->password = Hash::make($request->password);
+        }
 
+        $user->syncRoles(explode(', ', $request->roles));
+        $user->save();
+
+        $user = User::with('countryCode', 'roles')->findOrfail($id);
 
         return new UserResource($user);
     }
