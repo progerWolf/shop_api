@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Models\CountryCode;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -29,8 +28,10 @@ class UpdateUserRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'password' => 'required|string|confirmed|min:6',
-            'country_code' => 'required|numeric',
+            'change_password_type' => 'required',
+            'current_password' => 'exclude_if:change_password_type,none|required|string|min:8',
+            'password' => 'exclude_if:change_password_type,none,auto|required|string|confirmed|min:8'
+//            'country_code' => 'required|numeric',
 //            'phone' => [
 //                'required',
 //                'unique:users',
