@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Facade\Ignition\DumpRecorder\DumpHandler;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Sluggable\HasSlug;
@@ -58,5 +59,10 @@ class Product extends Model
 
     public function shop() {
         return $this->belongsTo(Shop::class);
+    }
+
+    public function attribute_values()
+    {
+        return $this->belongsToMany(AttributeValue::class, 'attribute_values', 'product_id', 'attribute_id');
     }
 }

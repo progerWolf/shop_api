@@ -14,8 +14,10 @@ class CreateAttributeValuesTable extends Migration
     public function up()
     {
         Schema::create('attribute_values', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->foreignId('product_id');
+            $table->foreignId('attribute_id');
+            $table->text('value');
+            $table->float('price')->default(0.0);
         });
     }
 

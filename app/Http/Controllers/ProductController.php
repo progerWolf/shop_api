@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductRequest;
 use App\Http\Resources\ProductResource;
+use App\Http\Resources\ShopResource;
 use App\Models\Product;
+use App\Models\Shop;
 use Illuminate\Http\Request;
 use phpDocumentor\Reflection\Types\Resource_;
 
@@ -26,24 +29,31 @@ class ProductController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
-        //
+        $product = Product::create($request->all() + [
+            'status'  => Product::STATUS_NEW,
+            'user_id' => auth()->user()->id
+        ]);
+
+        $attributeValues = [];
+
+        foreach ($request->attributeValues as $attribute) {
+            $attributeValues[$attribute["attribute_id"]] = [
+                'product_id' => $product->id,
+                'price' => $attribute["price"],
+                'value' => $attribute["value"],
+            ];
+        }
+
+        $product->attribute_values()->sync($attributeValues);
+
+        return new ProductResource($product->load('category:id,name,slug', 'shop:id,name,slug'));
     }
 
     /**
@@ -55,17 +65,6 @@ class ProductController extends Controller
     public function show(Product $product)
     {
         return new ProductResource($product->load('shop:id,name,slug'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Product $product)
-    {
-        //
     }
 
     /**
@@ -98,5 +97,11 @@ class ProductController extends Controller
             return ProductResource::collection($products);
         }
         abort(404);
+    }
+
+    public function getProductsWithShop(Shop $shop)
+    {
+        $products = Product::with("category:id,name,slug")->where(['shop_id' => $shop->id])->paginate(12);
+        return ProductResource::collection($products);
     }
 }

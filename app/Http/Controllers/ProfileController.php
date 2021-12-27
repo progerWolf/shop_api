@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UpdateProfileRequest;
+use App\Http\Resources\ShopResource;
 use App\Http\Resources\UserResource;
+use App\Models\Shop;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
@@ -77,5 +79,10 @@ class ProfileController extends Controller
         return response()->json(
             ['message' => 'Ваш аккаунт успешно удалено']
         );
+    }
+
+    public function getUserShops() {
+        $shops = Shop::where('user_id', auth()->user()->id)->get();
+        return ShopResource::collection($shops);
     }
 }
