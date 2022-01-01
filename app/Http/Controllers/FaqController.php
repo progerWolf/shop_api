@@ -19,7 +19,7 @@ class FaqController extends Controller
      */
     public function index(): AnonymousResourceCollection
     {
-        $faqs = Faq::paginate(10);
+        $faqs = Faq::where('is_active', true)->get();
         return FaqResource::collection($faqs);
     }
 

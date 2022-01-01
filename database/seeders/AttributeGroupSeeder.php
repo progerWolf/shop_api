@@ -15,16 +15,16 @@ class AttributeGroupSeeder extends Seeder
     public function run()
     {
         AttributeGroup::insert([
-            ['name' => 'Цвет'],
-            ['name' => 'Размер'],
-            ['name' => 'Дизайн'],
-            ['name' => 'Масса'],
-            ['name' => 'Содержание'],
-            ['name' => 'Запах'],
-            ['name' => 'Вкус'],
-            ['name' => 'Чувствовать'],
-            ['name' => 'Количество'],
-            ['name' => 'Упаковка'],
+            ['name' => 'Цвет', 'is_active' => 1],
+            ['name' => 'Размер', 'is_active' => 1],
+            ['name' => 'Дизайн', 'is_active' => 1],
+            ['name' => 'Масса', 'is_active' => 1],
+            ['name' => 'Содержание', 'is_active' => 1],
+            ['name' => 'Запах', 'is_active' => 1],
+            ['name' => 'Вкус', 'is_active' => 1],
+            ['name' => 'Чувствовать', 'is_active' => 1],
+            ['name' => 'Количество', 'is_active' => 1],
+            ['name' => 'Упаковка', 'is_active' => 1],
         ]);
     }
 }

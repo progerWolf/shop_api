@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AttributeRequest;
 use App\Http\Resources\AttributeResource;
 use App\Models\Attribute;
 use Illuminate\Http\Request;
@@ -13,19 +14,12 @@ class AttributeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return AttributeResource::collection(Attribute::get());
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        if ($request->dashboard) {
+            return AttributeResource::collection(Attribute::with('attribute_group:id,name')->paginate(20));
+        }
+        return AttributeResource::collection(Attribute::where('is_active', 1)->get());
     }
 
     /**
@@ -34,9 +28,10 @@ class AttributeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(AttributeRequest $request)
     {
-        //
+        $attribute = Attribute::create($request->all());
+        return new AttributeResource($attribute);
     }
 
     /**
@@ -47,18 +42,7 @@ class AttributeController extends Controller
      */
     public function show(Attribute $attribute)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Attribute  $attribute
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Attribute $attribute)
-    {
-        //
+        return new AttributeResource($attribute);
     }
 
     /**
@@ -68,9 +52,10 @@ class AttributeController extends Controller
      * @param  \App\Models\Attribute  $attribute
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Attribute $attribute)
+    public function update(AttributeRequest $request, Attribute $attribute)
     {
-        //
+        $attribute->update($request->all());
+        return new AttributeResource($attribute);
     }
 
     /**
@@ -81,6 +66,6 @@ class AttributeController extends Controller
      */
     public function destroy(Attribute $attribute)
     {
-        //
+        $attribute->delete();
     }
 }
