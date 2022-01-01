@@ -10,6 +10,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Models\ConfirmPassword;
 use App\Models\CountryCode;
+use App\Models\Permission;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
@@ -49,11 +50,21 @@ class AuthController extends Controller
             return $checkCountry;
         }
 
-        // if ($request->dashboard && !User::where('phone', $request->phone)->first()->hasPermission('dashboard')) {
-        //     return response()->json([
-        //         'message'=> 'У вас нет разрешения.'
-        //     ], 403);
-        // }
+        if ($request->dashboard && !(
+            User::where('phone', $request->phone)->first()->hasPermission('dashboard-read') ||
+            User::where([
+                'phone' => $request->phone,
+                'is_active' => 1
+            ])->first()->hasRole('superadministrator')
+            )) {
+            return response()->json([
+                User::where([
+                    'phone' => $request->phone,
+                    'is_active' => 1
+                ])->first()->hasPermission('dashboard-read'),
+                'message'=> 'У вас нет разрешения.'
+            ], 403);
+        }
 
         if (!$token = auth()->setTTL(45000)->attempt([
             'phone' => $request->phone,
@@ -302,6 +313,6 @@ class AuthController extends Controller
      */
     public function me()
     {
-        return response()->json(auth()->user());
+        return response()->json(User::with('permissions:id,name,display_name')->find(auth()->user()->id));
     }
 }

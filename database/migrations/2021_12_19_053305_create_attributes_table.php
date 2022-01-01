@@ -18,6 +18,7 @@ class CreateAttributesTable extends Migration
             $table->string('name');
             $table->string('value')->nullable();
             $table->foreignId('attribute_group_id');
+            $table->boolean('is_active')->default(0);
             $table->timestamps();
         });
     }

@@ -23,7 +23,8 @@ class AttributeSeeder extends Seeder
             Attribute::create([
                 "name" => $obj->name,
                 "value" => $obj->value,
-                "attribute_group_id" => 1
+                "attribute_group_id" => 1,
+                'is_active' => 1
             ]);
         }
     }
