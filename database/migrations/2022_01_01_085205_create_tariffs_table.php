@@ -18,7 +18,7 @@ class CreateTariffsTable extends Migration
             $table->string('title');
             $table->string('short_desc');
             $table->string('desc');
-            $table->integer('price');
+            $table->float('price');
             $table->boolean('is_active')->default(false);
             $table->timestamps();
         });
