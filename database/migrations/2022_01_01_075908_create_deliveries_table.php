@@ -16,6 +16,7 @@ class CreateDeliveriesTable extends Migration
         Schema::create('deliveries', function (Blueprint $table) {
             $table->id();
             $table->string('title');
+            $table->boolean('is_active');
             $table->timestamps();
         });
     }

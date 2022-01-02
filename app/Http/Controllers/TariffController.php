@@ -7,6 +7,7 @@ use App\Http\Resources\TariffResource;
 use App\Models\Tariff;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 
 class TariffController extends Controller
 {
@@ -17,7 +18,14 @@ class TariffController extends Controller
      */
     public function index(): AnonymousResourceCollection
     {
-        $tariffs = Tariff::query()->where('is_active', '=', true)->get();
+        $builder = Tariff::query();
+        $tariffs = [];
+        if (is_null(Auth::user()) || Auth::user()->hasRole('user')){
+            $tariffs = $builder->where('is_active', '=', true)->get();
+        } elseif (!is_null(Auth::user()) && !Auth::user()->hasRole('user')) {
+            $tariffs = $builder->get();
+        }
+
         return TariffResource::collection($tariffs);
     }
 
