@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 /**
  * @property int $id
  * @property string $title
+ * @property bool $is_active
  */
 
 class Delivery extends Model
@@ -16,7 +17,8 @@ class Delivery extends Model
     use HasFactory;
 
     protected $fillable = [
-        'title'
+        'title',
+        'is_active'
     ];
 
     public function options(): HasMany

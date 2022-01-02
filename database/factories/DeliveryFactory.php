@@ -14,7 +14,8 @@ class DeliveryFactory extends Factory
     public function definition()
     {
         return [
-            'title' => $this->faker->title
+            'title' => $this->faker->title,
+            'is_active' => $this->faker->boolean
         ];
     }
 }
