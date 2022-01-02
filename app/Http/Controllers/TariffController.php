@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\TariffRequest;
 use App\Http\Resources\TariffResource;
 use App\Models\Tariff;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
@@ -18,7 +17,7 @@ class TariffController extends Controller
      */
     public function index(): AnonymousResourceCollection
     {
-        $tariffs = Tariff::query()->where('is_active', '=',true)->get();
+        $tariffs = Tariff::query()->where('is_active', '=', true)->get();
         return TariffResource::collection($tariffs);
     }
 
@@ -78,7 +77,7 @@ class TariffController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return Response
      */
     public function destroy($id)
