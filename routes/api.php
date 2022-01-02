@@ -5,6 +5,7 @@ use App\Http\Controllers\AttributeGroupController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CountryCodeController;
 use App\Http\Controllers\FaqController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PartnershipProposalController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\CategoryController;
@@ -71,6 +72,7 @@ Route::group(['middleware' => ['api', 'auth'], 'prefix' => 'dashboard'], functio
         RoleController::class,
         ['except' => ['destroy']]
     );
+    Route::get('/orders', [OrderController::class, 'index']);
     Route::apiResource('partnership-proposals', PartnershipProposalController::class);
     Route::apiResource('posts', PostController::class);
     Route::apiResource('faqs', FaqController::class);
@@ -87,5 +89,10 @@ Route::group(['middleware' => ['api', 'auth'], 'prefix' => 'profile'], function 
     ]);
     Route::apiResource('posts', PostController::class);
     Route::apiResource('faqs', FaqController::class);
+    Route::get('/orders', [OrderController::class, 'index']);
+    Route::get('/orders/my', [OrderController::class, 'myOrders']);
 });
 
+Route::apiResource('orders', OrderController::class)->except('index', 'destroy', 'update');
+Route::post('orders/confirm_code', [OrderController::class, 'sendConfirmCode']);
+Route::post('orders/confirm_order', [OrderController::class, 'confirmOrder']);

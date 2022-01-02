@@ -30,6 +30,9 @@ class DatabaseSeeder extends Seeder
         $this->call(ShopSeeder::class);
         $this->call(ProductSeeder::class);
         $this->call(LaratrustSeeder::class);
+        $this->call(AttributeGroupSeeder::class);
+        $this->call(AttributeSeeder::class);
+        $this->call(OrderSeeder::class);
     }
 
     private function createPartnershipProposalsForUsers($users): void
@@ -40,13 +43,5 @@ class DatabaseSeeder extends Seeder
             $user->partnership_proposal_id = $partnershipProposalId;
             $user->save();
         });
-
-        $this->call(CountryCodeSeeder::class);
-        $this->call(CategorySeeder::class);
-        $this->call(ShopSeeder::class);
-        $this->call(ProductSeeder::class);
-        $this->call(LaratrustSeeder::class);
-        $this->call(AttributeGroupSeeder::class);
-        $this->call(AttributeSeeder::class);
     }
 }
