@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AttributeGroupRequest;
 use App\Http\Resources\AttributeGroupResource;
 use App\Models\AttributeGroup;
 use Illuminate\Http\Request;
@@ -13,19 +14,12 @@ class AttributeGroupController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return AttributeGroupResource::collection(AttributeGroup::get());
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        if ($request->dashboard) {
+            return AttributeGroupResource::collection(AttributeGroup::paginate(20));
+        }
+        return AttributeGroupResource::collection(AttributeGroup::where('is_active', 1)->get());
     }
 
     /**
@@ -34,9 +28,10 @@ class AttributeGroupController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(AttributeGroupRequest $request)
     {
-        //
+        $attributeGroup = AttributeGroup::create($request->all());
+        return new AttributeGroupResource($attributeGroup);
     }
 
     /**
@@ -47,18 +42,7 @@ class AttributeGroupController extends Controller
      */
     public function show(AttributeGroup $attributeGroup)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\AttributeGroup  $attributeGroup
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(AttributeGroup $attributeGroup)
-    {
-        //
+        return new AttributeGroupResource($attributeGroup);
     }
 
     /**
@@ -70,7 +54,8 @@ class AttributeGroupController extends Controller
      */
     public function update(Request $request, AttributeGroup $attributeGroup)
     {
-        //
+        $attributeGroup->update($request->all());
+        return new AttributeGroupResource($attributeGroup);
     }
 
     /**
@@ -81,6 +66,6 @@ class AttributeGroupController extends Controller
      */
     public function destroy(AttributeGroup $attributeGroup)
     {
-        //
+        $attributeGroup->delete();
     }
 }

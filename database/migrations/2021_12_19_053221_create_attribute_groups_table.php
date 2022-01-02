@@ -16,6 +16,7 @@ class CreateAttributeGroupsTable extends Migration
         Schema::create('attribute_groups', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->boolean('is_active')->default(0);
             $table->timestamps();
         });
     }

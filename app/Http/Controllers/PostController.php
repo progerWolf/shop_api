@@ -17,7 +17,7 @@ class PostController extends Controller
      */
     public function index(): AnonymousResourceCollection
     {
-        $posts = Post::paginate(10);
+        $posts = Post::where(['is_active'=> true])->orderBy('created_at', 'desc')->paginate(6);
         return PostResource::collection($posts);
     }
 
@@ -54,9 +54,9 @@ class PostController extends Controller
      * @param int $id
      * @return PostResource
      */
-    public function show(int $id): PostResource
+    public function show($slug) : PostResource
     {
-        $post = Post::FindOrFail($id);
+        $post = Post::where(['is_active'=> true, 'slug'=> $slug])->first();
         return new PostResource($post);
     }
 
@@ -99,5 +99,12 @@ class PostController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function about()
+    {
+        $post = Post::where(['is_active'=> true, 'type'=> 'about'])->latest()->first();
+
+        return new PostResource($post);
     }
 }

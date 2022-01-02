@@ -1,4 +1,4 @@
 [
-    {"name": "Россия", "maxlength": "9", "minlength": "9", "iso": "RU", "phone_code": 7, "flag": "🇷🇺", "is_active": true},
-    {"name": "Таджикистан", "maxlength": "9", "minlength": "9", "iso": "TJ", "phone_code": 992, "flag": "\uD83C\uDDF9\uD83C\uDDEF", "is_active": true}
+    {"name": "Таджикистан", "maxlength": "9", "minlength": "9", "iso": "TJ", "phone_code": 992, "flag": "\uD83C\uDDF9\uD83C\uDDEF", "is_active": true},
+    {"name": "Россия", "maxlength": "9", "minlength": "9", "iso": "RU", "phone_code": 7, "flag": "🇷🇺", "is_active": true}
 ]
