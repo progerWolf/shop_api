@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Auth\CheckNumberRequest;
+use App\Http\Requests\ConfirmOrderCodeRequest;
+use App\Http\Requests\SendOrderConfirmCodeRequest;
 use App\Http\Requests\StoreOrderRequest;
 use App\Http\Resources\OrderResource;
 use App\Models\Customer;
@@ -121,10 +123,10 @@ class OrderController extends Controller
     }
 
     /**
-     * @param CheckNumberRequest $request
+     * @param ConfirmOrderCodeRequest $request
      * @return bool|JsonResponse
      */
-    public function confirmOrder(CheckNumberRequest $request): JsonResponse|bool
+    public function confirmOrder(ConfirmOrderCodeRequest $request): JsonResponse|bool
     {
         $checkCountry = checkAndFormatNumberCountry($request);
 
@@ -133,7 +135,7 @@ class OrderController extends Controller
         }
 
         $phone = $request->phone;
-        $customerId = $request->custmer_id;
+        $customerId = $request->customer_id;
         $order = Order::with('customer')
             ->whereHas('customer', function ($query) use ($customerId, $phone) {
                 return $query->where('id', $customerId)->where('phone', $phone);
@@ -158,11 +160,11 @@ class OrderController extends Controller
     }
 
     /**
-     * @param CheckNumberRequest $request
+     * @param SendOrderConfirmCodeRequest $request
      * @return JsonResponse
      * @throws Exception
      */
-    public function sendConfirmCode(CheckNumberRequest $request): JsonResponse
+    public function sendConfirmCode(SendOrderConfirmCodeRequest $request): JsonResponse
     {
         $checkCountry = checkAndFormatNumberCountry($request);
 
@@ -171,7 +173,7 @@ class OrderController extends Controller
         }
 
         $phone = $request->phone;
-        $customerId = $request->custmer_id;
+        $customerId = $request->customer_id;
         $order = Order::with('customer')
             ->whereHas('customer', function ($query) use ($customerId, $phone) {
                 return $query->where('id', $customerId)->where('phone', $phone);
@@ -209,7 +211,7 @@ class OrderController extends Controller
      * @param int $id
      * @return OrderResource
      */
-    public function show(int $id): OrderResource
+    public function show(Request $request,int $id): OrderResource
     {
         $order = Order::with('customer', 'details', 'addresses', 'deliveryOption')->where('id', $id)->first();
         return new OrderResource($order);
