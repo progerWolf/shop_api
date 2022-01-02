@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePostsTable extends Migration
+class CreateTariffsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,13 @@ class CreatePostsTable extends Migration
      */
     public function up()
     {
-        Schema::create('posts', function (Blueprint $table) {
+        Schema::create('tariffs', function (Blueprint $table) {
             $table->id();
-            $table->string('title')->unique();
-            $table->longText('description');
-            $table->text('short_description');
-            $table->string('image');
+            $table->string('title');
+            $table->string('short_desc');
+            $table->string('desc');
+            $table->integer('price');
             $table->boolean('is_active')->default(false);
-            $table->enum('type', [
-                'post',
-                'about'
-            ])->default('post');
             $table->timestamps();
         });
     }
@@ -35,6 +31,6 @@ class CreatePostsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('posts');
+        Schema::dropIfExists('tariffs');
     }
 }
