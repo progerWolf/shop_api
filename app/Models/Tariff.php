@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $title
  * @property string $short_desc
  * @property string $desc
- * @property int $price
+ * @property float $price
  * @property bool $is_active
  */
 
