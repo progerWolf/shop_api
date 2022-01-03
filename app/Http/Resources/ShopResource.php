@@ -15,26 +15,27 @@ class ShopResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'slug' => $this->slug,
-            'address' => $this->address,
-            'description' => $this->description,
-            'phone' => $this->phone,
-            'image' => $this->image,
-            'user_id' => $this->user_id,
-            'category_id' => $this->category_id,
-            'opening_hour' => $this->opening_hour,
-            'closing_hour' => $this->closing_hour,
-            'delivery_price' => $this->delivery_price,
-            'purchase' => $this->purchase,
-            'status' => $this->status,
-            'category' => $this->category,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at
-        ];
+        // return [
+        //     'id' => $this->id,
+        //     'name' => $this->name,
+        //     'slug' => $this->slug,
+        //     'address' => $this->address,
+        //     'description' => $this->description,
+        //     'phone' => $this->phone,
+        //     'image' => $this->image,
+        //     'user_id' => $this->user_id,
+        //     'category_id' => $this->category_id,
+        //     'opening_hour' => $this->opening_hour,
+        //     'closing_hour' => $this->closing_hour,
+        //     'delivery_price' => $this->delivery_price,
+        //     'purchase' => $this->purchase,
+        //     'status' => $this->status,
+        //     'category' => $this->category,
+        //     'author' => $this->author,
+        //     'created_at' => $this->created_at,
+        //     'updated_at' => $this->updated_at,
+        // ];
 
-        // return parent::toArray($request);
+        return parent::toArray($request);
     }
 }

@@ -35,6 +35,11 @@ class ShopRequest extends FormRequest
             'opening_hour' => 'required|date_format:H:i',
             'closing_hour' => 'required|date_format:H:i',
             'purchase' => 'required',
+            'dashboard' => 'boolean',
+            'delivery_price' => 'exclude_if:dashboard,false|required',
+            'user_id' => 'exclude_if:dashboard,false|required',
+            'status' => 'exclude_if:dashboard,false|required',
+            
         ];
     }
 

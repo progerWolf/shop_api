@@ -38,7 +38,7 @@ class UserController extends Controller
             $builder->where('phone', 'like', "%$request->phone%");
         }
 
-        $users = $builder->paginate(20);
+        $users = $request->dashboard ? $builder->get() : $builder->paginate(20);
 
         return UserResource::collection($users);
     }

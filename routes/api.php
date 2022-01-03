@@ -49,9 +49,9 @@ Route::get('countrycode', [CountryCodeController::class, 'index']);
 Route::get('attribute-groups', [AttributeGroupController::class, 'index']);
 Route::get('attributes', [AttributeController::class, 'index']);
 Route::post('image/{dir}', [UploadFileController::class, 'uploadImageFile']);
-Route::resource('shops', ShopController::class)->middleware('auth', ['except' => ['index', 'show']]);
-Route::resource('products', ProductController::class);
-Route::resource('categories', CategoryController::class, ['except' => ['store', 'update', 'destroy']]);
+Route::apiResource('shops', ShopController::class)->middleware('auth', ['except' => ['index', 'show']]);
+Route::apiResource('products', ProductController::class);
+Route::apiResource('categories', CategoryController::class, ['except' => ['store', 'update', 'destroy']]);
 Route::get('categories/subcategories/{id}', [CategoryController::class, 'subcategories']);
 Route::get("get-products-by-id", [ProductController::class, "getProductsById"]);
 Route::get('posts', [PostController::class, 'index']);
@@ -71,6 +71,8 @@ Route::group(['middleware' => ['api', 'auth'], 'prefix' => 'dashboard'], functio
     Route::apiResource('faqs', FaqController::class);
     Route::apiResource('tariffs', TariffController::class);
     Route::apiResource('deliveries', DeliveryController::class);
+    Route::apiResource('shops', ShopController::class);
+    Route::apiResource('products', ProductController::class);
 });
 
 Route::group(['middleware' => ['api', 'auth'], 'prefix' => 'profile'], function ($router) {
