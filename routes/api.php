@@ -4,7 +4,9 @@ use App\Http\Controllers\AttributeController;
 use App\Http\Controllers\AttributeGroupController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CountryCodeController;
+use App\Http\Controllers\DeliveryController;
 use App\Http\Controllers\FaqController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PartnershipProposalController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\CategoryController;
@@ -13,6 +15,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ShopController;
+use App\Http\Controllers\TariffController;
 use App\Http\Controllers\UploadFileController;
 use App\Http\Controllers\UserController;
 use App\Http\Requests\ProductRequest;
@@ -66,6 +69,8 @@ Route::group(['middleware' => ['api', 'auth'], 'prefix' => 'dashboard'], functio
     Route::apiResource('partnership-proposals', PartnershipProposalController::class);
     Route::apiResource('posts', PostController::class);
     Route::apiResource('faqs', FaqController::class);
+    Route::apiResource('tariffs', TariffController::class);
+    Route::apiResource('deliveries', DeliveryController::class);
 });
 
 Route::group(['middleware' => ['api', 'auth'], 'prefix' => 'profile'], function ($router) {
@@ -79,5 +84,12 @@ Route::group(['middleware' => ['api', 'auth'], 'prefix' => 'profile'], function 
     ]);
     Route::apiResource('posts', PostController::class);
     Route::apiResource('faqs', FaqController::class);
+    Route::get('/orders', [OrderController::class, 'index']);
+    Route::get('/orders/my', [OrderController::class, 'myOrders']);
 });
 
+Route::get('tariffs', [TariffController::class, 'index']);
+Route::get('deliveries', [DeliveryController::class, 'index']);
+Route::apiResource('orders', OrderController::class)->except('index', 'destroy', 'update');
+Route::post('orders/confirm_code', [OrderController::class, 'sendConfirmCode']);
+Route::post('orders/confirm_order', [OrderController::class, 'confirmOrder']);
