@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
             'phone' => '+992000000000',
             'password' => 'password',
             'is_active' => 1,
-            'country_code_id' => 2
+            'country_code_id' => 1
         ]);
         $users = User::factory(10)->create();
         $posts = Post::factory(50)->create();
@@ -37,7 +37,7 @@ class DatabaseSeeder extends Seeder
         $this->call(LaratrustSeeder::class);
         $this->call(AttributeGroupSeeder::class);
         $this->call(AttributeSeeder::class);
-        $this->call(OrderSeeder::class);
+        // $this->call(OrderSeeder::class);
         $this->call(PermissionSeeder::class);
     }
 

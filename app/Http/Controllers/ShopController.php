@@ -6,6 +6,7 @@ use App\Http\Requests\ShopRequest;
 use App\Http\Resources\ShopResource;
 use App\Models\Product;
 use App\Models\Shop;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class ShopController extends Controller
@@ -17,6 +18,9 @@ class ShopController extends Controller
      */
     public function index(Request $request)
     {
+        if ($request->dashboard) {
+            return ShopResource::collection(Shop::with('author:id,name', 'category:id,name,is_active')->paginate(20));
+        }
         $shops = Shop::with('category:id,name')->where('status', Shop::STATUS_PUBLISHE);
 
         if($request->category_slug) {
@@ -40,10 +44,14 @@ class ShopController extends Controller
      */
     public function store(ShopRequest $request)
     {
-        $shop = Shop::create($request->all() + [
-            'status'  => Shop::STATUS_NEW,
-            'user_id' => auth()->user()->id
-        ]);
+        if ($request->dashboard) {
+            $shop = Shop::create($request->all());
+        } else {
+            $shop = Shop::create($request->all() + [
+                'status'  => Shop::STATUS_NEW,
+                'user_id' => auth()->user()->id
+            ]);
+        }
 
         return new ShopResource($shop->load('category:id,name,slug'));
     }
@@ -56,7 +64,7 @@ class ShopController extends Controller
      */
     public function show(Shop $shop)
     {
-        return new ShopResource($shop->load('category:id,name,slug'));
+        return new ShopResource($shop->load('category:id,name,slug', 'author:id,name'));
     }
 
     /**
@@ -68,11 +76,15 @@ class ShopController extends Controller
      */
     public function update(Request $request, Shop $shop)
     {
-        $shop->update($request->all() + [
-            'status'  => Shop::STATUS_NEW
-        ]);
+        if ($request->dashboard) {
+            $shop->update($request->all());
+        } else {
+            $shop->update($request->all() + [
+                'status'  => Shop::STATUS_IN_MODERATION
+            ]);
+        }
 
-        return new ShopResource($shop->load('category:id,name,slug'));
+        return new ShopResource($shop);
     }
 
     /**
@@ -84,6 +96,13 @@ class ShopController extends Controller
     public function destroy(Shop $shop)
     {
         if($shop->user_id === auth()->user()->id) {
+            Product::where('shop_id', $shop->id)->delete();
+            $shop->delete();
+            return response()->json([
+                'message' => 'Магазин с продуктами успешно удалено'
+            ]);
+        }
+        else if($request->dashboard) {
             Product::where('shop_id', $shop->id)->delete();
             $shop->delete();
             return response()->json([
