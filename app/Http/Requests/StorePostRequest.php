@@ -30,7 +30,7 @@ class StorePostRequest extends FormRequest
             'description' => 'required|string|min:100',
             'image' => 'required|string',
             'is_active' => 'boolean',
-            'type' => 'in:post,about'
+            'type' => 'string'
         ];
     }
 
@@ -61,6 +61,6 @@ class StorePostRequest extends FormRequest
      * @return void [object][object of various validation errors]
      */
     public function failedValidation(Validator $validator) {
-        throw new HttpResponseException(response()->json($validator->errors(), 422));
+        throw new HttpResponseException(response()->json($validator->errors()->all(), 422));
     }
 }

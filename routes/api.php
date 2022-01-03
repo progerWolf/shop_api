@@ -58,20 +58,11 @@ Route::get('faqs', [FaqController::class, 'index']);
 
 Route::group(['middleware' => ['api', 'auth'], 'prefix' => 'dashboard'], function ($router) {
     Route::apiResource('countrycode', CountryCodeController::class,);
-    Route::apiResource('user', UserController::class);
+    Route::apiResource('users', UserController::class);
     Route::apiResource('attribute-groups', AttributeGroupController::class);
     Route::apiResource('attributes', AttributeController::class);
     Route::apiResource('categories', CategoryController::class);
-    Route::apiResource(
-        'permissions',
-        PermissionController::class,
-        ['except' => ['destroy']]
-    );
-    Route::apiResource(
-        'roles',
-        RoleController::class,
-        ['except' => ['destroy']]
-    );
+    Route::apiResource('roles', RoleController::class);
     Route::apiResource('partnership-proposals', PartnershipProposalController::class);
     Route::apiResource('posts', PostController::class);
     Route::apiResource('faqs', FaqController::class);

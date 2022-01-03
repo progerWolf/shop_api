@@ -27,8 +27,8 @@ class StoreRoleRequest extends FormRequest
     {
         return [
             'display_name' => 'required|max:255',
-            'name' => 'required|max:100|alpha_dash|unique:role,name',
-            'description' => 'sometimes|max:255'
+            'name' => 'required|max:100|alpha_dash|unique:roles,name',
+            'permissions' => 'nullable'
         ];
     }
 
@@ -44,7 +44,7 @@ class StoreRoleRequest extends FormRequest
             'display_name.max'        => 'Слишком длинная пользовательская имя',
             'name.required'           => 'Имя является обязательным',
             'name.max'                => 'Слишком длинная имя',
-            'description.max'         => 'Слишком длинное описание',
+            'name.unique'             => 'Имя уже занято',
         ];
     }
 
@@ -55,6 +55,6 @@ class StoreRoleRequest extends FormRequest
      * @return void [object][object of various validation errors]
      */
     public function failedValidation(Validator $validator) {
-        throw new HttpResponseException(response()->json($validator->errors(), 422));
+        throw new HttpResponseException(response()->json($validator->errors()->all(), 422));
     }
 }

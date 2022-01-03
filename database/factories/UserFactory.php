@@ -18,7 +18,7 @@ class UserFactory extends Factory
             'name' => $this->faker->name(),
             'phone' => "+992" . $this->faker->randomElement(['988', '502', '777', '937', '900']) . $this->faker->unique->biasedNumberBetween(000000,999999),
             'is_active' => 1,
-            'country_code_id' => 2,
+            'country_code_id' => 1,
             'password' => 'password',
         ];
     }
