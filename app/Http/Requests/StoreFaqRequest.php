@@ -56,6 +56,6 @@ class StoreFaqRequest extends FormRequest
      * @return void [object][object of various validation errors]
      */
     public function failedValidation(Validator $validator) {
-        throw new HttpResponseException(response()->json($validator->errors(), 422));
+        throw new HttpResponseException(response()->json($validator->errors()->all(), 422));
     }
 }

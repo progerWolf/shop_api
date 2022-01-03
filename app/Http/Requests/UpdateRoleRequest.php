@@ -27,7 +27,7 @@ class UpdateRoleRequest extends FormRequest
     {
         return [
             'display_name' => 'required|max:255',
-            'name' => 'required|max:100|alphadash|unique:role,name,'.$this->role,
+            'name' => 'required|max:100|alphadash|unique:roles,name,'.$this->role,
             'description' => 'sometimes|max:255'
         ];
     }

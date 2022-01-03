@@ -28,9 +28,8 @@ class UpdateUserRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'change_password_type' => 'required',
-            'current_password' => 'exclude_if:change_password_type,none|required|string|min:8',
-            'password' => 'exclude_if:change_password_type,none,auto|required|string|confirmed|min:8'
+            'change_password' => 'required|boolean',
+            'password' => 'exclude_if:change_password,false|required|string|confirmed|min:8'
 //            'country_code' => 'required|numeric',
 //            'phone' => [
 //                'required',
@@ -55,6 +54,9 @@ class UpdateUserRequest extends FormRequest
 //            'password.required'       => 'Пароль является обязательным',
 //            'password.min'            => 'Пароль должен содержать минимум 8 символов',
 //            'password.confirmed'      => 'Пароли не совпадают',
+            'password.required'       => 'Пароль является обязательным',
+            'password.min'            => 'Пароль должен содержать минимум 8 символов',
+            'password.confirmed'      => 'Пароли не совпадают',
             'country_code.required'     => 'Код страны яквляется обязательным',
             'country_code.numeric'      => 'Код страны должен быт числом'
         ];
@@ -67,6 +69,6 @@ class UpdateUserRequest extends FormRequest
      * @return void [object][object of various validation errors]
      */
     public function failedValidation(Validator $validator) {
-        throw new HttpResponseException(response()->json($validator->errors(), 422));
+        throw new HttpResponseException(response()->json($validator->errors()->all(), 422));
     }
 }

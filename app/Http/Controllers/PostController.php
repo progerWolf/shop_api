@@ -7,6 +7,7 @@ use App\Http\Resources\PostResource;
 use App\Models\Post;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
@@ -15,8 +16,11 @@ class PostController extends Controller
      *
      * @return AnonymousResourceCollection
      */
-    public function index(): AnonymousResourceCollection
+    public function index(Request $request): AnonymousResourceCollection
     {
+        if ($request->dashboard) {
+            return PostResource::collection(Post::paginate(20));
+        }
         $posts = Post::where(['is_active'=> true])->orderBy('created_at', 'desc')->paginate(6);
         return PostResource::collection($posts);
     }
@@ -56,7 +60,11 @@ class PostController extends Controller
      */
     public function show($slug) : PostResource
     {
-        $post = Post::where(['is_active'=> true, 'slug'=> $slug])->first();
+        $post = Post::where('slug', $slug);
+        if (request('dashboard')) {
+            return new PostResource($post->first());
+        }
+        $post->where('is_active', true)->first();
         return new PostResource($post);
     }
 
@@ -67,25 +75,10 @@ class PostController extends Controller
      * @param int $id
      * @return PostResource|JsonResponse
      */
-    public function update(StorePostRequest $request, int $id): PostResource|JsonResponse
+    public function update(StorePostRequest $request, $slug): PostResource|JsonResponse
     {
-        $shortDesc = substr($request->description, 0, 30);
-
-        $post = new Post();
-        $post->exists = true;
-        $post->id = $id;
-        $post->title = $request->title;
-        $post->description = $request->description;
-        $post->short_description = $shortDesc . '...';
-        $post->image = $request->image;
-        $post->is_active = $request->is_active;
-        $post->type = $request->type;
-
-        if (!$post->save()) {
-            return response()->json([
-                'message' => 'Произошла ошибка обновлении поста проверте данные'
-            ], 400);
-        }
+        $post = Post::where('slug', $slug)->first();
+        $post->update($request->all());
 
         return new PostResource($post);
     }
@@ -96,9 +89,9 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Post $post)
     {
-        //
+        $post->delete();
     }
 
     public function about()

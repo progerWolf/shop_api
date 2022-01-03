@@ -17,8 +17,11 @@ class FaqController extends Controller
      *
      * @return AnonymousResourceCollection
      */
-    public function index(): AnonymousResourceCollection
+    public function index(Request $request): AnonymousResourceCollection
     {
+        if ($request->dashboard) {
+            return FaqResource::collection(Faq::paginate(20));
+        }
         $faqs = Faq::where('is_active', true)->get();
         return FaqResource::collection($faqs);
     }
@@ -64,20 +67,9 @@ class FaqController extends Controller
      * @param int $id
      * @return FaqResource|JsonResponse
      */
-    public function update(StoreFaqRequest $request, int $id): FaqResource|JsonResponse
+    public function update(StoreFaqRequest $request, Faq $faq): FaqResource|JsonResponse
     {
-        $faq = new Faq();
-        $faq->exists = true;
-        $faq->id = $id;
-        $faq->title = $request->title;
-        $faq->body = $request->body;
-        $faq->is_active = $request->is_active;
-
-        if (!$faq->save()) {
-            return response()->json([
-                'message' => 'Произошла ошибка создании поста проверте данные'
-            ], 400);
-        }
+        $faq->update($request->all());
 
         return new FaqResource($faq);
     }
@@ -88,8 +80,8 @@ class FaqController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function destroy($id)
+    public function destroy(Faq $faq)
     {
-        //
+        $faq->delete();
     }
 }

@@ -30,22 +30,14 @@ class RoleController extends Controller
      */
     public function store(StoreRoleRequest $request): RoleResource|JsonResponse
     {
-        $role = new Role();
-        $role->name = $request->name;
-        $role->display_name = $request->display_name;
-        $role->descrptin = $request->descrptin;
+        $role = Role::create([
+            'name'=> $request->name,
+            'display_name'=> $request->display_name,
+        ]);
 
-        if ($request->selectedPermissionsIds) {
-            $role->syncPermissions(explode(',', $request->selectedPermissionsIds));
-        }
+        $role->syncPermissions($request->permissions);
 
-        if (!$role->save()) {
-            return response()->json([
-                'message' => 'Произошла ошибка содании проверте данные'
-            ], 400);
-        }
-
-        return new RoleResource($role);
+        return new RoleResource($role->load('permissions'));
     }
 
     /**
@@ -69,23 +61,13 @@ class RoleController extends Controller
      */
     public function update(UpdateRoleRequest $request, int $id): RoleResource|JsonResponse
     {
-        $role = new Role();
+        $role = Role::findOrFail($id);
+        $role->update([
+            'name'=> $request->name,
+            'display_name'=> $request->display_name,
+        ]);
 
-        $role->exists = true;
-        $role->id = $id;
-        $role->name = $request->name;
-        $role->display_name = $request->display_name;
-        $role->descrptin = $request->descrptin;
-
-        if ($request->selectedPermissionsIds) {
-            $role->syncPermissions(explode(',', $request->selectedPermissionsIds));
-        }
-
-        if (!$role->save()) {
-            return response()->json([
-                'message' => 'Произошла ошибка обновении проверте данные'
-            ], 400);
-        }
+        $role->syncPermissions($request->permissions);
 
         return new RoleResource($role);
 
@@ -97,8 +79,8 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Role $role)
     {
-        //
+        $role->delete();
     }
 }

@@ -23,16 +23,19 @@ class UserController extends Controller
      */
     public function index(Request $request): AnonymousResourceCollection
     {
-        $builder = User::with('roles');
+        $builder = User::with('roles', 'countryCode:id,name,flag');
 
-        if (Auth::user()->hasRole('admin')) {
-            if ($request->has('role')) {
-                $role = mb_strtolower($request->get('role'));
-
-                $builder->whereHas('roles', function($query) use ($role) {
-                    return $query->where('name', $role)->orWhere('display_name', $role);
-                });
-            }
+        if ($request->role) {
+            $role = mb_strtolower($request->get('role'));
+            $builder->whereHas('roles', function($query) use ($role) {
+                return $query->where('name', $role)->orWhere('display_name', $role);
+            });
+        }
+        if ($request->name) {
+            $builder->where('name', 'like', "%$request->name%");
+        }
+        if ($request->phone) {
+            $builder->where('phone', 'like', "%$request->phone%");
         }
 
         $users = $builder->paginate(20);
@@ -53,13 +56,9 @@ class UserController extends Controller
             return $checkCountry;
         }
 
-        $user = User::create([
-            'name' => $request->name,
-            'phone' => $request->phone,
-            'password' => $request->password,
-            'is_active' => $request->is_active,
-            'country_code_id' => $request->country_code
-        ]);
+        $user = User::create($request->all());
+
+        $user->syncRoles($request->roles);
 
         return new UserResource($user);
     }
@@ -94,17 +93,17 @@ class UserController extends Controller
         $user->name = $request->name;
         $user->is_active = $request->is_active;
 
-        if ($request->change_password_type === 'auto') {
+        // if ($request->change_password_type === 'auto') {
             //TODO create auto password generator
             $autoPassword = '';
 //            $user->password = Hash::make($autoPassword);
+        // }
+        if ($request->change_password) {
+            $user->password = $request->password;
         }
-        if ($request->change_password_type === 'manual') {
-            $user->password = Hash::make($request->password);
-        }
-
-        $user->syncRoles(explode(', ', $request->roles));
         $user->save();
+
+        $user->syncRoles($request->roles);
 
         $user = User::with('countryCode', 'roles')->findOrfail($id);
 
@@ -117,13 +116,12 @@ class UserController extends Controller
      * @param int $id
      * @return UserResource
      */
-    public function destroy(int $id): UserResource
+    public function destroy(int $id)
     {
         $user = User::with('countryCode')->where('id', $id);
         $user->update([
             'is_active' => false,
-            'deleted_at' => Carbon::now()->format("Y-m-d H:i:s")
         ]);
-        return new UserResource($user);
+        $user->delete();
     }
 }
