@@ -114,7 +114,7 @@ class ShopController extends Controller
     }
 
     public function getUserShops() {
-        $shops = Shop::where('user_id', auth()->user()->id)->get();
+        $shops = Shop::with('category:id,name,slug')->where('user_id', auth()->user()->id)->get();
         return ShopResource::collection($shops);
     }
 }

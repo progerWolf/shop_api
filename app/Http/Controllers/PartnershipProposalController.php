@@ -34,9 +34,9 @@ class PartnershipProposalController extends Controller
         //TODO Checking roles and permissions after ACL end
         $partnershipProposal = new PartnershipProposal();
 
-        $user = User::where('id', $request->user_id)->first();
+        $user = User::where('id', auth()->user()->id)->first();
 
-        $partnershipProposal->user_id = $request->user_id;//auth()->user()->id;
+        $partnershipProposal->user_id = auth()->user()->id;;
         $partnershipProposal->passport_front_side = $request->passport_front_side;
         $partnershipProposal->passport_back_side = $request->passport_back_side;
         $partnershipProposal->selfie_with_passport = $request->selfie_with_passport;

@@ -22,6 +22,9 @@ class CategoryController extends Controller
         }
 
         $categories = Category::where('is_active', 1);
+        if ($request->parent) {
+            $categories->where('parent_id', 0);
+        }
         return CategoryResource::collection($categories->get());
     }
 
