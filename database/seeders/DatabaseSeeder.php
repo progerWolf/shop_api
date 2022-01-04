@@ -35,8 +35,10 @@ class DatabaseSeeder extends Seeder
         $this->call(ShopSeeder::class);
         $this->call(ProductSeeder::class);
         $this->call(LaratrustSeeder::class);
-        $this->call(AttributeGroupSeeder::class);
-        $this->call(AttributeSeeder::class);
+        $this->call(ColorSeeder::class);
+        $this->call(SizeSeeder::class);
+        // $this->call(AttributeGroupSeeder::class);
+        // $this->call(AttributeSeeder::class);
         // $this->call(OrderSeeder::class);
         $this->call(PermissionSeeder::class);
     }

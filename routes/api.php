@@ -10,11 +10,13 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PartnershipProposalController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ColorController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ShopController;
+use App\Http\Controllers\SizeController;
 use App\Http\Controllers\TariffController;
 use App\Http\Controllers\UploadFileController;
 use App\Http\Controllers\UserController;
@@ -58,6 +60,8 @@ Route::get('posts', [PostController::class, 'index']);
 Route::get('posts/{slug}', [PostController::class, 'show']);
 Route::get('about', [PostController::class, 'about']);
 Route::get('faqs', [FaqController::class, 'index']);
+Route::get('colors', [ColorController::class, 'index']);
+Route::get('sizes', [SizeController::class, 'index']);
 
 Route::group(['middleware' => ['api', 'auth'], 'prefix' => 'dashboard'], function ($router) {
     Route::apiResource('countrycode', CountryCodeController::class,);
@@ -73,6 +77,8 @@ Route::group(['middleware' => ['api', 'auth'], 'prefix' => 'dashboard'], functio
     Route::apiResource('deliveries', DeliveryController::class);
     Route::apiResource('shops', ShopController::class);
     Route::apiResource('products', ProductController::class);
+    Route::apiResource('colors', ColorController::class);
+    Route::apiResource('sizes', SizeController::class);
 });
 
 Route::group(['middleware' => ['api', 'auth'], 'prefix' => 'profile'], function ($router) {
