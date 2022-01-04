@@ -90,8 +90,6 @@ Route::group(['middleware' => ['api', 'auth'], 'prefix' => 'profile'], function 
     Route::apiResource('partnership-proposal', PartnershipProposalController::class,[
         'except' => ['index']
     ]);
-    Route::apiResource('posts', PostController::class);
-    Route::apiResource('faqs', FaqController::class);
     Route::get('/orders', [OrderController::class, 'index']);
     Route::get('/orders/my', [OrderController::class, 'myOrders']);
 });

@@ -26,7 +26,7 @@ class StorePartnershipProposalRequest extends FormRequest
     public function rules()
     {
         return [
-            'user_id' => 'sometimes|unique:users,id',
+            // 'user_id' => 'sometimes|unique:users,id',
             'passport_front_side' => 'required|string',
             'passport_back_side' => 'required|string',
             'selfie_with_passport' => 'required|string',
