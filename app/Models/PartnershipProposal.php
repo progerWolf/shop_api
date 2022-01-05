@@ -22,6 +22,11 @@ class PartnershipProposal extends Model
 {
     use HasFactory;
 
+    public array $types = [
+        'courier' => 'курер',
+        'store' => 'магазин'
+    ];
+
     protected $fillable = [
         'user_id',
         'passport_front_side'.

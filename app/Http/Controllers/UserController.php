@@ -6,19 +6,16 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @return AnonymousResourceCollection
      */
     public function index(Request $request): AnonymousResourceCollection
@@ -95,7 +92,7 @@ class UserController extends Controller
 
         // if ($request->change_password_type === 'auto') {
             //TODO create auto password generator
-            $autoPassword = '';
+//            $autoPassword = '';
 //            $user->password = Hash::make($autoPassword);
         // }
         if ($request->change_password) {
@@ -114,11 +111,11 @@ class UserController extends Controller
      * Remove the specified resource from storage.
      *
      * @param int $id
-     * @return UserResource
+     * @return void
      */
-    public function destroy(int $id)
+    public function destroy(int $id): void
     {
-        $user = User::with('countryCode')->where('id', $id);
+        $user = User::where('id', $id);
         $user->update([
             'is_active' => false,
         ]);
