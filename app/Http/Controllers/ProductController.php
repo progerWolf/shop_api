@@ -31,7 +31,7 @@ class ProductController extends Controller
     public function store(ProductRequest $request): ProductResource
     {
         $product = Product::create($request->all());
-        return new ProductResource($product->load('category:id,name,slug', 'shop:id,name,slug'));
+        return new ProductResource($product->load('category:id,name,slug', 'shop:id,name,slug', 'weight'));
     }
 
     /**
