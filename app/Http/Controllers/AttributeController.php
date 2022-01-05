@@ -4,43 +4,42 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AttributeRequest;
 use App\Http\Resources\AttributeResource;
-use App\Models\Attribute;
-use Illuminate\Http\Request;
+use App\Models\ProductAttribute;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use JetBrains\PhpStorm\Pure;
 
 class AttributeController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return AnonymousResourceCollection
      */
-    public function index(Request $request)
+    public function index(): AnonymousResourceCollection
     {
-        if ($request->dashboard) {
-            return AttributeResource::collection(Attribute::with('attribute_group:id,name')->paginate(20));
-        }
-        return AttributeResource::collection(Attribute::where('is_active', 1)->get());
+        $attr = ProductAttribute::query()->paginate(20);
+        return AttributeResource::collection($attr);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param AttributeRequest $request
+     * @return AttributeResource
      */
-    public function store(AttributeRequest $request)
+    public function store(AttributeRequest $request): AttributeResource
     {
-        $attribute = Attribute::create($request->all());
-        return new AttributeResource($attribute);
+        $attr = ProductAttribute::create($request->all());
+        return new AttributeResource($attr);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Attribute  $attribute
-     * @return \Illuminate\Http\Response
+     * @param ProductAttribute $attribute
+     * @return AttributeResource
      */
-    public function show(Attribute $attribute)
+    #[Pure] public function show(ProductAttribute $attribute): AttributeResource
     {
         return new AttributeResource($attribute);
     }
@@ -48,11 +47,11 @@ class AttributeController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Attribute  $attribute
-     * @return \Illuminate\Http\Response
+     * @param AttributeRequest $request
+     * @param ProductAttribute $attribute
+     * @return AttributeResource
      */
-    public function update(AttributeRequest $request, Attribute $attribute)
+    public function update(AttributeRequest $request, ProductAttribute $attribute): AttributeResource
     {
         $attribute->update($request->all());
         return new AttributeResource($attribute);
@@ -61,10 +60,10 @@ class AttributeController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Attribute  $attribute
-     * @return \Illuminate\Http\Response
+     * @param ProductAttribute $attribute
+     * @return void
      */
-    public function destroy(Attribute $attribute)
+    public function destroy(ProductAttribute $attribute): void
     {
         $attribute->delete();
     }

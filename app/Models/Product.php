@@ -2,67 +2,63 @@
 
 namespace App\Models;
 
-use Facade\Ignition\DumpRecorder\DumpHandler;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Sluggable\HasSlug;
-use Spatie\Sluggable\SlugOptions;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property int $id
+ * @property string $title
+ * @property string $short_desc
+ * @property float $price
+ * @property float $sale_price
+ * @property int $category_id
+ * @property int $weight_id
+ * @property int $shop_id
+ *
+ * @method static Product create(array $attributes = [])
+ */
 class Product extends Model
 {
     use HasFactory;
-    use HasSlug;
-
-    public const STATUS_NEW                 = 0;
-    public const STATUS_IN_MODERATION       = 1;
-    public const STATUS_PUBLISHED           = 2;
 
     protected $fillable = [
-        'name',
-        'slug',
+        'title',
         'short_desc',
-        'images',
         'price',
-        'user_id',
+        'sale_price',
         'category_id',
-        'shop_id',
-        'status',
-        'quantity'
+        'weight_id',
+        'shop_id'
     ];
 
     protected $casts = [
         'price' => 'float',
-        'images' => 'array',
-        'status' => "integer"
+        'sale_price' => 'float'
     ];
 
     /**
-     * Get the route key for the model.
-     *
-     * @return string
+     * @return BelongsTo
      */
-    public function getRouteKeyName()
+    public function category(): BelongsTo
     {
-        return 'slug';
-    }
-
-    public function getSlugOptions() : SlugOptions
-    {
-        return SlugOptions::create()
-            ->generateSlugsFrom('name')
-            ->saveSlugsTo('slug');
-    }
-
-    public function category() {
         return $this->belongsTo(Category::class);
     }
 
-    public function shop() {
+    /**
+     * @return BelongsTo
+     */
+    public function shop(): BelongsTo
+    {
         return $this->belongsTo(Shop::class);
     }
 
-    public function attribute_values()
+    /**
+     * @return BelongsTo
+     */
+    public function weight(): BelongsTo
     {
-        return $this->belongsToMany(AttributeValue::class, 'attribute_values', 'product_id', 'attribute_id');
+        return $this->belongsTo(Weight::class);
     }
+
 }
