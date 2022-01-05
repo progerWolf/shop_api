@@ -4,77 +4,55 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductRequest;
 use App\Http\Resources\ProductResource;
-use App\Http\Resources\ShopResource;
 use App\Models\Product;
 use App\Models\Shop;
 use Illuminate\Http\Request;
-use phpDocumentor\Reflection\Types\Resource_;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return AnonymousResourceCollection
      */
-    public function index(Request $request)
+    public function index(): AnonymousResourceCollection
     {
-        $products = Product::with('shop:id,name,slug', 'category:id,name,slug')->where('status', Product::STATUS_PUBLISHED);
-        if ($request->shop_slug) {
-            $products->whereHas('shop', function($q) use ($request) {
-                $q->where('slug', $request->shop_slug);
-            });
-        }
+        $products = Product::with('shop:id,name,slug', 'category:id,name,slug', 'weight');
         return ProductResource::collection($products->paginate(12));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param ProductRequest $request
+     * @return ProductResource
      */
-    public function store(ProductRequest $request)
+    public function store(ProductRequest $request): ProductResource
     {
-        $product = Product::create($request->all() + [
-            'status'  => Product::STATUS_NEW,
-            'user_id' => auth()->user()->id
-        ]);
-
-        $attributeValues = [];
-
-        foreach ($request->attributeValues as $attribute) {
-            $attributeValues[$attribute["attribute_id"]] = [
-                'product_id' => $product->id,
-                'price' => $attribute["price"],
-                'value' => $attribute["value"],
-            ];
-        }
-
-        $product->attribute_values()->sync($attributeValues);
-
+        $product = Product::create($request->all());
         return new ProductResource($product->load('category:id,name,slug', 'shop:id,name,slug'));
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
+     * @param Product $product
+     * @return ProductResource
      */
-    public function show(Product $product)
+    public function show(Product $product): ProductResource
     {
-        return new ProductResource($product->load('shop:id,name,slug'));
+        return new ProductResource($product->load('shop:id,name, weight'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param Product $product
+     * @return void
      */
-    public function update(Request $request, Product $product)
+    public function update(Request $request, Product $product): void
     {
         //
     }
@@ -82,26 +60,41 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
+     * @param Product $product
+     * @return void
      */
-    public function destroy(Product $product)
+    public function destroy(Product $product): void
     {
         //
     }
 
+    /**
+     * Display product with published status
+     *
+     * @param Request $request
+     * @return AnonymousResourceCollection|void
+     */
     public function getProductsById(Request $request)
     {
         if ($request->products) {
-            $products = Product::with('shop:id,name,slug', 'category:id,name,slug')->where('status', Product::STATUS_PUBLISHED)->whereIn('id', $request->products)->get();
+            $products = Product::with('shop:id,name,slug', 'category:id,name,slug, weight')
+                ->whereIn('id', $request->products)->get();
             return ProductResource::collection($products);
         }
         abort(404);
     }
 
-    public function getProductsWithShop(Shop $shop)
+    /**
+     * Display shop products
+     *
+     * @param Shop $shop
+     * @return AnonymousResourceCollection
+     */
+    public function getProductsWithShop(Shop $shop): AnonymousResourceCollection
     {
-        $products = Product::with("category:id,name,slug")->where(['shop_id' => $shop->id])->paginate(12);
+        $products = Product::with("category:id,name,slug, weight")
+            ->where(['shop_id' => $shop->id])
+            ->paginate(12);
         return ProductResource::collection($products);
     }
 }

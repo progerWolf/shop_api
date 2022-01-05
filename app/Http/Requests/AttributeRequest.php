@@ -2,12 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\Models\CountryCode;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Validation\Rule;
-use JetBrains\PhpStorm\ArrayShape;
 
 class AttributeRequest extends FormRequest
 {
@@ -29,10 +26,13 @@ class AttributeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required',
-            'is_active' => 'required',
-            'value' => 'required',
-            'attribute_group_id' => 'nullable',
+            'price' => 'required',
+            'sale_price' => 'required',
+            'quantity' => 'required',
+            'img' => 'required',
+            'size_id' => 'required|numeric',
+            'color_id' => 'required|numeric',
+            'product_id' => 'required|numeric'
         ];
     }
 
@@ -41,12 +41,16 @@ class AttributeRequest extends FormRequest
      *
      * @return array
      */
-    public function messages()
+    public function messages(): array
     {
         return [
-            'name.required'           => 'Название является обязательным',
-            'is_active.required'      => 'Статус является обязательным',
-            'value.required'      => 'Значиние является обязательным',
+            'price.required' => 'Цена является обязательным',
+            'sale_price.required' => 'Цена по скидке является обязательным',
+            'quantity.required' => 'Количество является обязательным',
+            'img.required' => 'Фотография является обязательным',
+            'size_id.required' => 'Размер является обязательным',
+            'color_id.required' => 'Цвет является обязательным',
+            'product_id.required' => 'Продукт является обязательным',
         ];
     }
 
@@ -56,7 +60,8 @@ class AttributeRequest extends FormRequest
      *
      * @return void [object][object of various validation errors]
      */
-    public function failedValidation(Validator $validator) {
+    public function failedValidation(Validator $validator): void
+    {
         throw new HttpResponseException(response()->json($validator->errors()->all(), 422));
     }
 }
