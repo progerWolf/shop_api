@@ -31,12 +31,20 @@ class PartnershipProposalController extends Controller
      */
     public function store(StorePartnershipProposalRequest $request): PartnershipProposalResource|JsonResponse
     {
-        //TODO Checking roles and permissions after ACL end
         $partnershipProposal = new PartnershipProposal();
 
-        $user = User::where('id', auth()->user()->id)->first();
+        $userProposalsCount = PartnershipProposal::query()
+            ->where('user_id', auth()->user()->id)
+            ->where('type', $request->type)
+            ->count();
 
-        $partnershipProposal->user_id = auth()->user()->id;;
+        if ($userProposalsCount > 0) {
+            return response()->json([
+                'message' => 'У вас уже есть заявка на ' . $partnershipProposal->types[$request->type]
+            ], 400);
+        }
+
+        $partnershipProposal->user_id = auth()->user()->id;
         $partnershipProposal->passport_front_side = $request->passport_front_side;
         $partnershipProposal->passport_back_side = $request->passport_back_side;
         $partnershipProposal->selfie_with_passport = $request->selfie_with_passport;
@@ -47,9 +55,6 @@ class PartnershipProposalController extends Controller
                 'message' => 'Произошла ошибка создании запроса проверте данные'
             ], 400);
         }
-
-        $user->partnership_proposal_id = $partnershipProposal->id;
-        $user->save();
 
         return new PartnershipProposalResource($partnershipProposal);
     }
@@ -75,17 +80,18 @@ class PartnershipProposalController extends Controller
      */
     public function update(UpdatePartnershipProposalRequest $request, int $id): PartnershipProposalResource|JsonResponse
     {
-        //TODO Checking roles and permissions after ACL end
-        $partnershipProposal = new PartnershipProposal();
+        $partnershipProposal = PartnershipProposal::query()
+            ->where('user_id', auth()->user()->id)
+            ->where('id', $id);
 
-        $partnershipProposal->exists = true;
-        $partnershipProposal->id = $id;
-        $partnershipProposal->passport_front_side = $request->passport_front_side;
-        $partnershipProposal->passport_back_side = $request->passport_back_side;
-        $partnershipProposal->selfie_with_passport = $request->selfie_with_passport;
-        $partnershipProposal->type = $request->type;
+        $values = [
+            'passport_front_side' => $request->passport_front_side,
+            'passport_back_side' => $request->passport_back_side,
+            'selfie_with_passport' => $request->selfie_with_passport,
+            'type' => $request->type
+        ];
 
-        if (!$partnershipProposal->save()) {
+        if (!$partnershipProposal->update($values)) {
             return response()->json([
                 'message' => 'Произошла ошибка обновлении запроса проверте данные'
             ], 400);
@@ -102,13 +108,12 @@ class PartnershipProposalController extends Controller
      */
     public function destroy(int $id): JsonResponse
     {
-        $partnershipProposal = new PartnershipProposal();
+        $partnershipProposal = PartnershipProposal::query()
+            ->where('id', $id);
 
-        $partnershipProposal->exists = true;
-        $partnershipProposal->id = $id;
-        $partnershipProposal->status = 'canceled';
+        $values = ['status' => 'canceled'];
 
-        if (!$partnershipProposal->save()) {
+        if (!$partnershipProposal->update($values)) {
             return response()->json([
                 'message' => 'Произошла ошибка отмене запроса проверте данные'
             ], 400);

@@ -20,7 +20,6 @@ use Laratrust\Traits\LaratrustUserTrait;
  * @property $avatar
  * @property $is_active
  * @property $country_code_id
- * @property $partnership_proposal_id
  *
  * @method static user where($column, $operator = null, $value = null, $boolean = 'and')
  * @method static User first($columns = ['*'])
@@ -44,7 +43,6 @@ class User extends Authenticatable implements JWTSubject
         'avatar',
         'is_active',
         'country_code_id',
-        'partnership_proposal_id'
     ];
 
     /**
@@ -108,5 +106,5 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(Shop::class);
     }
 
-    
+
 }
